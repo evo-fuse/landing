@@ -59,7 +59,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
 
               {submitStatus && (
@@ -78,7 +78,7 @@ const About = () => {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                    className="block text-sm font-medium text-gray-300 mb-1"
                   >
                     Name
                   </label>
@@ -89,14 +89,14 @@ const About = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                    className="block text-sm font-medium text-gray-300 mb-1"
                   >
                     Email
                   </label>
@@ -107,14 +107,14 @@ const About = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                    className="block text-sm font-medium text-gray-300 mb-1"
                   >
                     Message
                   </label>
@@ -125,7 +125,7 @@ const About = () => {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
                   />
                 </div>
 
@@ -133,7 +133,7 @@ const About = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                    className="w-full bg-primary-dark hover:bg-primary text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50"
                   >
                     {isSubmitting ? "Sending..." : "Send Message"}
                   </button>

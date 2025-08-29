@@ -1,18 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaMoon, FaSun } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "../assets/Logo.png";
 
 const Header = () => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
 
   return (
     <header className="bg-black shadow-md sticky top-0 z-50">
@@ -45,32 +37,10 @@ const Header = () => {
           >
             About
           </Link>
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? (
-              <FaSun className="text-yellow-400" />
-            ) : (
-              <FaMoon className="text-gray-600" />
-            )}
-          </button>
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? (
-              <FaSun className="text-yellow-400" />
-            ) : (
-              <FaMoon className="text-gray-600" />
-            )}
-          </button>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
