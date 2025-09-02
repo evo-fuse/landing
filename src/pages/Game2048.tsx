@@ -1,4 +1,3 @@
-import { FaWindows } from "react-icons/fa";
 import { Game, Layout } from "../components";
 
 const Game2048 = () => {
