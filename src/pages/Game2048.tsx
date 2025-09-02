@@ -22,11 +22,12 @@ const Game2048 = () => {
                 <li>Uninterrupted Core Gameplay</li>
               </ul>
               <a 
-                href="#" 
-                className="flex items-center gap-2 bg-main-700 shadow-lg text-white py-3 px-4 rounded-lg hover:bg-main-500 transition-colors w-fit"
+                href="https://2048.evofuse.xyz" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="mt-4 inline-flex items-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/80 transition-colors"
               >
-                <FaWindows />
-                Download from Microsoft Store
+                Play Now
               </a>
             </div>
           <Game />

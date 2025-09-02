@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { Home, Game2048, About, NotFound } from './pages'
-import { useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { PageTransition } from './components'
 

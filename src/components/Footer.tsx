@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaTwitter, FaDiscord, FaGithub } from 'react-icons/fa';
+import { FaTwitter, FaDiscord } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
