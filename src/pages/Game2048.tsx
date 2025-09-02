@@ -24,7 +24,7 @@ const Game2048 = () => {
                 href="https://2048.evofuse.xyz" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="mt-4 inline-flex items-center px-6 py-3 bg-main-500 text-white font-bold rounded-lg hover:bg-main-700 transition-colors"
+                className="mt-4 max-w-min text-nowrap items-center px-6 py-3 bg-main-500 text-white font-bold rounded-lg hover:bg-main-700 transition-colors"
               >
                 Play Now
               </a>
