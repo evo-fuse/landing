@@ -60,7 +60,6 @@ const DiscoverGames = () => {
     <div id="games" className="min-h-[100vh] w-full relative overflow-hidden bg-gradient-to-b from-gray-900/80 to-black">
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(128,90,213,0.1)_0%,_rgba(0,0,0,0)_50%)]"></div>
-      <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-purple-600/5 blur-3xl"></div>
       
       {/* Main content grid */}
       <div className="grid grid-cols-1 w-[80vw] max-w-[1280px] mx-auto py-16 z-10 gap-12">
