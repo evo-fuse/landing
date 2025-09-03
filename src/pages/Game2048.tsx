@@ -8,11 +8,11 @@ const Game2048 = () => {
         <div className="w-[80vw] h-full max-w-[1280px] flex flex-col justify-center items-center">
           <div className="w-full flex justify-center items-center gap-10">
             <div className="flex flex-col gap-4 max-w-lg">
-              <h2 className="text-6xl text-black font-bold">EvoFuse 2048</h2>
-              <p className="text-gray-700 text-3xl">
+              <h2 className="text-6xl text-white font-bold">EvoFuse 2048</h2>
+              <p className="text-gray-200 text-3xl">
                 Experience our blockchain-powered 2048 game with unique features
               </p>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700 text-xl">
+              <ul className="list-disc pl-5 space-y-2 text-gray-200 text-xl">
                 <li>Earn Cryptocurrency Rewards Based on Performance</li>
                 <li>Share and Trade Customized Themes</li>
                 <li>Utilize Power-Up Items</li>
