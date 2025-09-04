@@ -47,20 +47,41 @@ const About = () => {
 
   return (
     <Layout>
-      <div className="h-[calc(100vh-56px)] w-full relative overflow-hidden flex justify-center">
-        <div className="w-[80vw] h-full max-w-[1280px] flex flex-col justify-center">
-          <div className="max-w-3xl mx-auto space-y-8 py-14">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4 text-black">
-                About EvoFuse
-              </h1>
-              <p className="text-lg text-gray-600">
+      <div className="h-[calc(100vh-56px)] w-full relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        <div className="w-[90vw] h-full max-w-[1600px] mx-auto py-12 flex flex-col justify-center">
+          <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-12 items-center">
+            <div className="flex flex-col gap-6 backdrop-blur-sm bg-black/20 p-8 rounded-2xl border border-gray-700/50 shadow-xl">
+              <div className="inline-block mb-2">
+                <span className="bg-main-500 text-white text-xs font-bold px-3 py-1 rounded-full">ABOUT US</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse</h2>
+              <p className="text-gray-200 text-xl">
                 Classic games reimagined on the Fuse Network blockchain.
               </p>
+              <p className="text-gray-200">
+                At EvoFuse, we're passionate about bringing traditional gaming experiences into the blockchain era. 
+                Our platform combines the nostalgia of classic games with the innovative capabilities of the Fuse Network, 
+                creating unique gaming experiences that are both familiar and revolutionary.
+              </p>
+              <ul className="list-none space-y-3 text-gray-200">
+                {[
+                  "Blockchain-powered gaming experiences",
+                  "Earn cryptocurrency while playing",
+                  "Own and trade in-game assets",
+                  "Community-driven development",
+                  "Cross-platform compatibility"
+                ].map((item, index) => (
+                  <li key={index} className="flex items-center">
+                    <span className="min-w-6 min-h-6 max-w-6 max-h-6 mr-3 bg-main-500 rounded-full flex items-center justify-center text-white">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
+            <div className="backdrop-blur-sm bg-black/20 p-8 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h2 className="text-2xl font-bold mb-4 text-white">Contact Us</h2>
 
               {submitStatus && (
                 <div
@@ -89,7 +110,7 @@ const About = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-main-500 focus:border-main-500 bg-gray-700/70 text-white"
                   />
                 </div>
 
@@ -107,7 +128,7 @@ const About = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-main-500 focus:border-main-500 bg-gray-700/70 text-white"
                   />
                 </div>
 
@@ -125,7 +146,7 @@ const About = () => {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-gray-700 text-white"
+                    className="focus:outline-none w-full px-4 py-2 border border-gray-600 rounded-md focus:ring-main-500 focus:border-main-500 bg-gray-700/70 text-white"
                   />
                 </div>
 
@@ -133,7 +154,7 @@ const About = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-primary-dark hover:bg-primary text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-main-500 to-main-700 hover:from-main-600 hover:to-main-800 text-white font-bold py-3 px-4 rounded-md transition-all duration-300 shadow-lg shadow-main-500/30 disabled:opacity-50"
                   >
                     {isSubmitting ? "Sending..." : "Send Message"}
                   </button>
