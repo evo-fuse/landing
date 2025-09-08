@@ -12,7 +12,7 @@ const Game2048 = () => {
               <div className="inline-block mb-2">
                 <span className="bg-main-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED GAME</span>
               </div>
-              <h2 className="text-5xl md:text-6xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse 2048</h2>
+              <h1 className="text-5xl md:text-6xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse 2048</h1>
               <p className="text-gray-200 text-2xl">
                 Experience our blockchain-powered 2048 game with unique features
               </p>

@@ -37,17 +37,15 @@ const Home = () => {
   return (
     <Layout>
       {/* Hero Section with Simple Black Background */}
-      <div ref={containerRef} className="h-[calc(100vh-56px)] w-full relative overflow-hidden flex justify-center bg-transparent"
-      >
-
+      <div ref={containerRef} className="h-[calc(100vh-56px)] w-full relative overflow-hidden flex justify-center bg-transparent">
         <motion.div 
           className="w-[80vw] h-full max-w-[1280px] flex flex-col justify-center z-10"
           style={{ y: springY2 }}
           layoutId="content-container"
         >
           <div className="w-full flex items-center justify-between bg-transparent p-10 rounded-2xl border border-gray-800 shadow-xl">
-            <div className="text-7xl text-white font-bold flex flex-col gap-6">
-              <motion.p 
+            <h1 className="text-7xl text-white font-bold flex flex-col gap-6">
+              <motion.span 
                 className="flex items-center"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -69,16 +67,16 @@ const Home = () => {
                   }}
                 /> Fuse is
                 a
-              </motion.p>
-              <motion.p
+              </motion.span>
+              <motion.span
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               >
                 Ecosystem for
-              </motion.p>
+              </motion.span>
               <AnimatePresence mode="wait">
-                <motion.p
+                <motion.span
                   key={currentWordIndex}
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -92,9 +90,9 @@ const Home = () => {
                   className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text"
                 >
                   {words[currentWordIndex]}
-                </motion.p>
+                </motion.span>
               </AnimatePresence>
-            </div>
+            </h1>
             <ul className="flex flex-col gap-6 text-white text-4xl bg-transparent p-6 rounded-xl border border-gray-800 shadow-lg">
               <motion.li 
                 className="flex items-center gap-4 hover:translate-x-2 transition-transform"

@@ -55,7 +55,7 @@ const About = () => {
               <div className="inline-block mb-2">
                 <span className="bg-main-500 text-white text-xs font-bold px-3 py-1 rounded-full">ABOUT US</span>
               </div>
-              <h2 className="text-4xl md:text-5xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse</h2>
+              <h1 className="text-4xl md:text-5xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse</h1>
               <p className="text-gray-200 text-xl">
                 Classic games reimagined on the Fuse Network blockchain.
               </p>

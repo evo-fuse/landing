@@ -10,11 +10,11 @@ const Header = () => {
     <header className="bg-black shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="text-2xl font-display font-bold text-primary flex items-end">
+          <h2 className="text-2xl font-display font-bold text-primary flex items-end m-0">
             Ev
             <img src={logo} alt="EvoFuse" className="h-4 pr-2 pl-[2px] mb-[7px]" /> 
             Fuse
-          </div>
+          </h2>
         </Link>
 
         {/* Desktop Navigation */}
