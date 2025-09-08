@@ -62,22 +62,26 @@ class DOMBatch {
    * Process all queued operations
    * First read from the DOM, then write to the DOM
    */
-  private process(): void {
-    // Process all read operations first
-    this.readQueue = [];
-    
-    // Process all write operations
-    const writes = this.writeQueue.slice();
-    this.writeQueue = [];
-    writes.forEach(write => write());
-    
-    this.scheduled = false;
-    
-    // If new operations were added during processing, schedule another frame
-    if (this.readQueue.length || this.writeQueue.length) {
-      this.schedule();
-    }
-  }
+   private process(): void {
+     // Process all read operations first
+     const reads = this.readQueue.slice();
+     this.readQueue = [];
+     
+     // Execute all reads before writes to prevent forced reflows
+     reads.forEach(read => read());
+     
+     // Process all write operations
+     const writes = this.writeQueue.slice();
+     this.writeQueue = [];
+     writes.forEach(write => write());
+     
+     this.scheduled = false;
+     
+     // If new operations were added during processing, schedule another frame
+     if (this.readQueue.length || this.writeQueue.length) {
+       this.schedule();
+     }
+   }
 }
 
 // Create a singleton instance
