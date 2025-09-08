@@ -78,6 +78,7 @@ export function removeConsolePlugin() {
 export function inlineCriticalCssPlugin(options = {}) {
   const defaultOptions = {
     cssFiles: ['index.css'],
+    minifyCriticalCss: true
   };
 
   const resolvedOptions = { ...defaultOptions, ...options };
@@ -102,17 +103,97 @@ export function inlineCriticalCssPlugin(options = {}) {
       if (criticalCssChunks.length === 0) return html;
 
       // Extract CSS content
-      const criticalCss = criticalCssChunks
+      let criticalCss = criticalCssChunks
         .map(chunk => chunk.source)
         .join('\n');
 
+      // Basic CSS minification for critical CSS
+      if (resolvedOptions.minifyCriticalCss) {
+        criticalCss = criticalCss
+          // Remove comments
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          // Remove whitespace
+          .replace(/\s+/g, ' ')
+          // Remove spaces around selectors
+          .replace(/\s*([{}:;,])\s*/g, '$1')
+          // Remove unnecessary semicolons
+          .replace(/;}/g, '}')
+          // Remove trailing whitespace
+          .trim();
+      }
+
+      // Extract only the most critical CSS rules for above-the-fold content
+      // Focus on layout, typography, and header styles
+      const aboveFoldCss = extractAboveFoldCss(criticalCss);
+
       // Inject critical CSS inline
-      return html.replace(
+      const modifiedHtml = html.replace(
         '</head>',
-        `<style id="critical-css">${criticalCss}</style></head>`
+        `<style id="critical-css">${aboveFoldCss}</style></head>`
+      );
+
+      // Add preload for the rest of the CSS
+      const cssLinks = cssChunks
+        .filter(chunk => !resolvedOptions.cssFiles.some(file => chunk.fileName.includes(file)))
+        .map(chunk => {
+          const href = chunk.fileName.startsWith('/') ? chunk.fileName : `/${chunk.fileName}`;
+          return `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">`;
+        })
+        .join('');
+
+      return modifiedHtml.replace(
+        '</head>',
+        `${cssLinks}</head>`
       );
     },
   };
+}
+
+/**
+ * Extract the most critical CSS for above-the-fold content
+ * @param {string} css - Full CSS content
+ * @returns {string} - Critical CSS for above-the-fold content
+ */
+function extractAboveFoldCss(css) {
+  // Define patterns for critical selectors
+  const criticalPatterns = [
+    // Layout and container styles
+    /body\s*{[^}]*}/g,
+    /html\s*{[^}]*}/g,
+    /\.container\s*{[^}]*}/g,
+    // Header styles
+    /header\s*{[^}]*}/g,
+    /\.header\s*{[^}]*}/g,
+    /#header\s*{[^}]*}/g,
+    // Navigation
+    /nav\s*{[^}]*}/g,
+    /\.nav\s*{[^}]*}/g,
+    // Typography
+    /h1\s*{[^}]*}/g,
+    /h2\s*{[^}]*}/g,
+    /p\s*{[^}]*}/g,
+    // Critical tailwind utilities
+    /\.flex\s*{[^}]*}/g,
+    /\.grid\s*{[^}]*}/g,
+    /\.hidden\s*{[^}]*}/g,
+    /\.block\s*{[^}]*}/g,
+    /\.text-\w+\s*{[^}]*}/g,
+    /\.bg-\w+\s*{[^}]*}/g,
+    /\.font-\w+\s*{[^}]*}/g,
+    // Animation classes for initial render
+    /\.animate-\w+\s*{[^}]*}/g
+  ];
+
+  // Extract critical CSS
+  let criticalCss = '';
+  criticalPatterns.forEach(pattern => {
+    const matches = css.match(pattern);
+    if (matches) {
+      criticalCss += matches.join('');
+    }
+  });
+
+  return criticalCss;
 }
 
 export default {

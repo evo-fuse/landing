@@ -18,16 +18,36 @@
     <link rel="preconnect" href="https://www.googletagmanager.com">
     
     <!-- Preload critical assets -->
-    <link rel="preload" href="/logo.png" as="image" type="image/png">
+    <!-- We're using an inline SVG for the logo now, no need to preload the image -->
     
-    <!-- We'll let the browser discover and load the dynamic assets -->
-    <!-- No hardcoded asset references that might change between builds -->
+    <!-- Preload critical JavaScript -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="modulepreload" href="/src/App.tsx">
+    <link rel="modulepreload" href="/src/components/Header.tsx">
     
-    <!-- Optimize font loading -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/src/index.css" as="style">
+    
+    <!-- Optimize font loading - only load essential weights initially -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     </noscript>
+    
+    <!-- Load remaining font weights asynchronously -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script>
+      // Defer loading of non-critical font weights
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Montserrat:wght@500;600;800&display=swap';
+          document.head.appendChild(link);
+        }, 2000); // 2 second delay
+      });
+    </script>
     
     <!-- SEO -->
     <title>EvoFuse - Classic Games on Fuse Network</title>

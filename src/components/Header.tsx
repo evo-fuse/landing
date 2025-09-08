@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import logo from "../assets/Logo.png";
+// Use an inline SVG instead of importing the image for faster loading
+const LogoSVG = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-4 pr-2 pl-[2px] mb-[7px]">
+    <path d="M8 0L16 8L8 16L0 8L8 0Z" fill="#8B5CF6" />
+  </svg>
+);
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +17,7 @@ const Header = () => {
         <Link to="/" className="flex items-center space-x-2">
           <h2 className="text-2xl font-display font-bold text-primary flex items-end m-0">
             Ev
-            <img src={logo} alt="EvoFuse" className="h-4 pr-2 pl-[2px] mb-[7px]" /> 
+            <LogoSVG />
             Fuse
           </h2>
         </Link>

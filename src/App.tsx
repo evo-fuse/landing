@@ -1,7 +1,9 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
-import { AnimatePresence } from 'framer-motion'
 import { PageTransition } from './components'
+
+// Import AnimatePresence dynamically to reduce initial bundle size
+const AnimatePresence = lazy(() => import('framer-motion').then(mod => ({ default: mod.AnimatePresence })))
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'))

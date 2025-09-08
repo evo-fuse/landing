@@ -46,42 +46,62 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash].[ext]',
         // Chunk splitting strategy
         manualChunks: (id) => {
-          // Critical path - keep these small and inline them
+          // Critical path - keep these minimal and optimize for First Contentful Paint
           if (id.includes('src/components/Layout.tsx') || 
               id.includes('src/components/Header.tsx') ||
               id.includes('src/App.tsx')) {
             return 'critical';
           }
           
-          // Core React dependencies
+          // Core React dependencies - essential for initial render
           if (id.includes('node_modules/react/') || 
-              id.includes('node_modules/react-dom/') || 
-              id.includes('node_modules/scheduler/')) {
+              id.includes('node_modules/react-dom/')) {
             return 'react-core';
           }
+
+          // Scheduler - separate from react core to reduce critical path size
+          if (id.includes('node_modules/scheduler/')) {
+            return 'react-scheduler';
+          }
           
-          // React Router
+          // React Router - needed early but not in critical path
           if (id.includes('node_modules/react-router') || 
               id.includes('node_modules/@remix-run')) {
             return 'routing';
           }
           
-          // Animation libraries
+          // Animation libraries - defer loading these
           if (id.includes('node_modules/framer-motion') || 
               id.includes('node_modules/@motionone')) {
             return 'animations';
           }
           
-          // Other animation libraries
+          // Other animation libraries - lowest priority
           if (id.includes('node_modules/gsap') || 
               id.includes('node_modules/react-spring') || 
               id.includes('node_modules/lottie-react')) {
             return 'animations-extra';
           }
+
+          // Icons - separate chunk for better caching
+          if (id.includes('node_modules/react-icons')) {
+            return 'icons';
+          }
           
-          // Vendor code
+          // Remaining vendor code
           if (id.includes('node_modules/')) {
             return 'vendor';
+          }
+
+          // Route-based code splitting
+          if (id.includes('src/pages/Home')) {
+            return 'page-home';
+          }
+          if (id.includes('src/pages/Game2048')) {
+            return 'page-2048';
+          }
+          if (id.includes('src/pages/About')) {
+            return 'page-about';
           }
         }
       }
@@ -99,10 +119,14 @@ export default defineConfig({
     include: [
       'react', 
       'react-dom', 
-      'react-router-dom', 
+      'react-router-dom'
+    ],
+    // Exclude heavy libraries from initial bundle
+    exclude: [
       'framer-motion',
       'gsap',
-      'react-spring'
+      'react-spring',
+      'lottie-react'
     ]
   }
 })
