@@ -143,7 +143,7 @@ const DiscoverGames = () => {
                     className={`px-6 py-3 rounded-lg font-bold shadow-lg transition-all ${
                       game.status
                         ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-purple-500/50"
-                        : "bg-gray-700 text-gray-400 border border-gray-600"
+                        : "bg-gray-700 text-gray-50 border border-gray-600"
                     }`}
                     onClick={() => {
                       if (game.url) {
