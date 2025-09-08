@@ -47,14 +47,14 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext', // Target modern browsers for better performance
     minify: 'terser',
     cssMinify: true,
-    assetsInlineLimit: 4096, // 4kb - inline small assets
+    assetsInlineLimit: 8192, // 8kb - inline more assets for fewer requests
     chunkSizeWarningLimit: 1000, // 1000kb warning limit
     // Enable module concatenation for better tree-shaking
     modulePreload: true,
     // Report on performance
     reportCompressedSize: true,
-    // Improve CSS handling
-    cssCodeSplit: true,
+    // Improve CSS handling - bundle all CSS into one file
+    cssCodeSplit: false,
     terserOptions: {
       compress: {
         // Remove console logs in production
@@ -81,6 +81,8 @@ export default defineConfig(({ mode }) => ({
     },
     // Generate sourcemaps only for development, not for production
     sourcemap: mode !== 'production',
+    
+    // CSS is already optimized above
     
     rollupOptions: {
       output: {
