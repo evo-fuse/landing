@@ -1,10 +1,5 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Game1 from "../assets/2048.png";
-import Game2 from "../assets/sudoku.png";
-import Game3 from "../assets/othello.png";
-import Game4 from "../assets/connectfour.png";
-import Game5 from "../assets/flappybird.png";
 
 interface Game {
   image?: string;
@@ -16,7 +11,7 @@ interface Game {
 
 const games: Game[] = [
   {
-    image: Game1,
+    image: "https://i.ibb.co/ymz62G4V/2048.png",
     title: "2048",
     description:
       "Merge tiles to create the 2048 tile in this addictive mathematical puzzle game.",
@@ -24,28 +19,28 @@ const games: Game[] = [
     url: "/2048"
   },
   {
-    image: Game2,
+    image: "https://i.ibb.co/jvStTStZ/sudoku.png",
     title: "Sudoku",
     description:
       "Fill the 9x9 grid with numbers so each column, row, and box contains digits 1-9.",
     status: false,
   },
   {
-    image: Game3,
+    image: "https://i.ibb.co/r2jp7TYx/othello.png",
     title: "Othello",
     description:
       "Strategic board game where players capture opponent's discs by flanking them.",
     status: false,
   },
   {
-    image: Game4,
+    image: "https://i.ibb.co/rRKx1cMp/connectfour.png",
     title: "Connect Four",
     description:
       "Drop colored discs to connect four in a row before your opponent does.",
     status: false,
   },
   {
-    image: Game5,
+    image: "https://i.ibb.co/MxDwTkT1/flappybird.png",
     title: "Flappy Bird",
     description:
       "Navigate a bird through obstacles by tapping to fly in this addictive side-scrolling game.",

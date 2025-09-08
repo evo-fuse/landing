@@ -1,7 +1,9 @@
 import { Layout, DiscoverGames } from "../components";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
-import darklogo from "../assets/Logo.png";
+
+const darklogo = "https://i.ibb.co/fV6LzYQB/DarkLogo.png";
+
 const Home = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const words = ["P2E Games", "Innovative Fuse", "Casual Gamers"];
