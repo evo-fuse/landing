@@ -102,6 +102,7 @@ const DiscoverGames = () => {
                   className="w-full h-56 object-cover"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5 }}
+                  loading="lazy"
                 />
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0"

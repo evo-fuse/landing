@@ -63,6 +63,7 @@ const Game2048 = () => {
                 src="https://i.ibb.co/m5TWdRCd/2048preview.png"
                 alt="2048"
                 className="relative rounded-2xl shadow-2xl border-[24px] border-[rgb(16,20,28)] transform transition-transform duration-500 group-hover:scale-[1.02]"
+                loading="lazy"
               />
             </div>
           </div>

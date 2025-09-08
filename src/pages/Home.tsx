@@ -67,6 +67,7 @@ const Home = () => {
                     repeatType: "loop",
                     ease: "easeInOut"
                   }}
+                  loading="lazy"
                 /> Fuse is
                 a
               </motion.span>
@@ -108,6 +109,7 @@ const Home = () => {
                   className="w-8"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
+                  loading="lazy"
                 />
                 <p>Challenging Games</p>
               </motion.li>
@@ -123,6 +125,7 @@ const Home = () => {
                   className="w-8"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
+                  loading="lazy"
                 />
                 <p>Innovative Features</p>
               </motion.li>
@@ -138,6 +141,7 @@ const Home = () => {
                   className="w-8"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
+                  loading="lazy"
                 />
                 <p>Fuse Reward</p>
               </motion.li>
@@ -153,6 +157,7 @@ const Home = () => {
                   className="w-8"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
+                  loading="lazy"
                 />
                 <p>Always Free</p>
               </motion.li>
