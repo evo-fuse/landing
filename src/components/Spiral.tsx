@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from "react";
-import { debounce, passiveEventOptions } from "../utils/performance";
+import { debounce } from "../utils/performance";
 
 export const Spiral: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
