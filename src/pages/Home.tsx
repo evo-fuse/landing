@@ -6,7 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 const DiscoverGames = lazy(() => import("../components/DiscoverGames"));
 
 // Use local image instead of external URL
-const darklogo = "https://i.ibb.co/HLnWv6Lg/Logo.png";
+const darklogo = "/logo.png";
 
 const Home = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -68,6 +68,7 @@ const Home = () => {
                   src={darklogo} 
                   className="w-9 h-auto pt-5 ml-1 mr-2"
                   loading="eager"
+                  alt="EvoFuse blockchain gaming platform logo"
                 /> Fuse is
                 a
               </motion.span>
@@ -102,6 +103,7 @@ const Home = () => {
                   src={darklogo} 
                   className="w-8 hover:rotate-12 transition-transform duration-300"
                   loading="eager"
+                  alt="EvoFuse challenging games feature icon"
                 />
                 <p>Challenging Games</p>
               </li>
@@ -110,6 +112,7 @@ const Home = () => {
                   src={darklogo} 
                   className="w-8 hover:rotate-12 transition-transform duration-300"
                   loading="eager"
+                  alt="EvoFuse innovative features icon"
                 />
                 <p>Innovative Features</p>
               </li>
@@ -118,6 +121,7 @@ const Home = () => {
                   src={darklogo} 
                   className="w-8 hover:rotate-12 transition-transform duration-300"
                   loading="eager"
+                  alt="EvoFuse blockchain rewards icon"
                 />
                 <p>Fuse Reward</p>
               </li>
@@ -126,6 +130,7 @@ const Home = () => {
                   src={darklogo} 
                   className="w-8 hover:rotate-12 transition-transform duration-300"
                   loading="eager"
+                  alt="EvoFuse free gaming platform icon"
                 />
                 <p>Always Free</p>
               </li>

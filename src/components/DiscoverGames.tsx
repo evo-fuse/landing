@@ -98,7 +98,7 @@ const DiscoverGames = () => {
               >
                 <motion.img
                   src={game.image}
-                  alt={game.title}
+                  alt={`EvoFuse ${game.title} blockchain game`}
                   className="w-full h-56 object-cover"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5 }}
