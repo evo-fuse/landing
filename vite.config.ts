@@ -10,16 +10,7 @@ export default defineConfig(({ mode }) => ({
       // Improve JSX runtime performance
       jsxRuntime: 'automatic',
       // Use babel for production builds only
-      babel: mode === 'production' ? {
-        plugins: [
-          // Remove prop types in production
-          ['transform-react-remove-prop-types', { removeImport: true }]
-        ],
-        // Optimize production builds
-        presets: [
-          ['@babel/preset-env', { targets: { browsers: 'defaults' } }]
-        ]
-      } : undefined
+      // Babel configuration not needed - Vite handles this automatically
     }),
     // Only use bundle analyzer when needed (disabled by default)
     process.env.ANALYZE === 'true' && visualizer({
