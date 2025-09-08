@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from "react";
-import { debounce, domBatch, passiveEventOptions } from "../utils/performance";
+import { debounce, passiveEventOptions } from "../utils/performance";
 
 export const Spiral: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -17,7 +17,7 @@ export const Spiral: React.FC = () => {
   const lastYRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Reduce complexity for mobile devices - use refs to avoid re-renders
+  // Reduce complexity for mobile devices
   const getMaxOffset = () => isMobileRef.current ? 200 : 400;
   const getSpacing = () => isMobileRef.current ? 8 : 4;
   const getPoints = () => getMaxOffset() / getSpacing();
@@ -33,114 +33,43 @@ export const Spiral: React.FC = () => {
     
     checkMobile();
     const debouncedCheckMobile = debounce(checkMobile, 250);
-    window.addEventListener('resize', debouncedCheckMobile, passiveEventOptions());
+    window.addEventListener('resize', debouncedCheckMobile);
     
     return () => {
-      window.removeEventListener('resize', debouncedCheckMobile, passiveEventOptions());
+      window.removeEventListener('resize', debouncedCheckMobile);
     };
   }, []);
 
-  // Initialize canvas context
-  useEffect(() => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d', { alpha: true, willReadFrequently: false });
-      if (ctx) {
-        contextRef.current = ctx;
-        setup();
-      }
-    }
-    
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      window.removeEventListener('resize', resize, passiveEventOptions());
-      window.removeEventListener('mousedown', onMouseDown, passiveEventOptions());
-      document.removeEventListener('touchstart', onTouchStart);
-    };
-  }, []);
-  
-  // Set up intersection observer to only animate when visible
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        isVisibleRef.current = entry.isIntersecting;
-        
-        if (entry.isIntersecting && !animationFrameRef.current) {
-          animationFrameRef.current = requestAnimationFrame(step);
-        } else if (!entry.isIntersecting && animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    observer.observe(canvasRef.current);
-    
-    return () => {
-      if (canvasRef.current) {
-        observer.unobserve(canvasRef.current);
-      }
-    };
-  }, []);
-  
-
-  const setup = (): void => {
-    resize();
-    
-    // Add event listeners with passive options where possible
-    window.addEventListener('resize', resize, passiveEventOptions());
-    window.addEventListener('mousedown', onMouseDown, passiveEventOptions());
-    document.addEventListener('touchstart', onTouchStart); // Can't be passive due to preventDefault
-    
-    // Start animation if visible
-    if (isVisibleRef.current && !animationFrameRef.current) {
-      animationFrameRef.current = requestAnimationFrame(step);
-    }
-  };
-
-  // Create a debounced resize handler to prevent forced reflows
+  // Resize canvas handler
   const resizeCanvas = useCallback(() => {
     if (!canvasRef.current) return;
     
-    // Use DOM batching to separate read and write operations
-    // First read all DOM values
-    const readDimensions = domBatch.read(() => {
-      const dpr = window.devicePixelRatio || 1;
-      const displayWidth = window.innerWidth;
-      const displayHeight = window.innerHeight;
-      return { dpr, displayWidth, displayHeight };
-    });
+    const dpr = window.devicePixelRatio || 1;
+    const displayWidth = window.innerWidth;
+    const displayHeight = window.innerHeight;
     
-    // Then perform all DOM writes
-    domBatch.write(() => {
-      const { dpr, displayWidth, displayHeight } = readDimensions();
-      
-      if (canvasRef.current) {
-        canvasRef.current.width = displayWidth * dpr;
-        canvasRef.current.height = displayHeight * dpr;
-        
-        canvasRef.current.style.width = `${displayWidth}px`;
-        canvasRef.current.style.height = `${displayHeight}px`;
-        
-        widthRef.current = displayWidth;
-        heightRef.current = displayHeight;
-        
-        // Scale the context according to device pixel ratio
-        if (contextRef.current) {
-          contextRef.current.scale(dpr, dpr);
-        }
-      }
-    });
+    // Set canvas dimensions
+    canvasRef.current.width = displayWidth * dpr;
+    canvasRef.current.height = displayHeight * dpr;
+    canvasRef.current.style.width = `${displayWidth}px`;
+    canvasRef.current.style.height = `${displayHeight}px`;
+    
+    widthRef.current = displayWidth;
+    heightRef.current = displayHeight;
+    
+    // Reset context with proper scale
+    if (contextRef.current) {
+      contextRef.current.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+      contextRef.current.scale(dpr, dpr);
+    }
   }, []);
   
-  // Create a debounced version of the resize handler
+  // Debounced resize handler
   const resize = debounce(resizeCanvas, 100);
 
-  const step = (): void => {
-    if (!isVisibleRef.current) {
+  // Animation step function
+  const step = useCallback(() => {
+    if (!isVisibleRef.current || !contextRef.current) {
       animationFrameRef.current = null;
       return;
     }
@@ -148,76 +77,75 @@ export const Spiral: React.FC = () => {
     timeRef.current += velocityRef.current;
     velocityRef.current += (velocityTargetRef.current - velocityRef.current) * 0.3;
 
-    clear();
-    render();
-
+    // Clear canvas
+    contextRef.current.clearRect(0, 0, widthRef.current, heightRef.current);
+    
+    // Render spiral
+    renderSpiral();
+    
+    // Continue animation loop
     animationFrameRef.current = requestAnimationFrame(step);
-  };
+  }, []);
 
-  const clear = (): void => {
-    if (contextRef.current) {
-      contextRef.current.clearRect(0, 0, widthRef.current, heightRef.current);
-    }
-  };
-
-  const render = (): void => {
-    if (!contextRef.current || !isVisibleRef.current) return;
-
-    let x: number;
-    let y: number;
+  // Render spiral function
+  const renderSpiral = useCallback(() => {
+    if (!contextRef.current) return;
+    
+    const ctx = contextRef.current;
     const cx = widthRef.current / 2;
     const cy = heightRef.current / 2;
-    const ctx = contextRef.current;
     const MAX_OFFSET = getMaxOffset();
     const SPACING = getSpacing();
     const POINTS = getPoints();
     const PEAK = getPeak();
     const SHADOW_STRENGTH = getShadowStrength();
-
-    // Performance optimization - skip shadow effects on mobile
+    
+    // Setup drawing context
     ctx.globalCompositeOperation = "lighter";
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = isMobileRef.current ? 1 : 2;
-    ctx.beginPath();
     
-    // Only use shadow effects on desktop for better performance
+    // Only use shadow effects on desktop
     if (!isMobileRef.current) {
       ctx.shadowColor = "#fff";
     }
-
-    // Reduce the number of points rendered on mobile
+    
+    // Reduce points on mobile
     const pointsToRender = isMobileRef.current ? Math.floor(POINTS / 2) : POINTS;
+    
+    // Draw spiral
+    ctx.beginPath();
     
     for (let i = pointsToRender; i > 0; i--) {
       const value = i * SPACING + (timeRef.current % SPACING);
-
+      
       const ax = Math.sin(value / POINTS_PER_LAP) * Math.PI;
       const ay = Math.cos(value / POINTS_PER_LAP) * Math.PI;
-
-      x = ax * value;
-      y = ay * value * 0.35;
-
+      
+      const x = ax * value;
+      const y = ay * value * 0.35;
+      
       const o = 1 - Math.min(value, PEAK) / PEAK;
-
-      y -= Math.pow(o, 2) * 200;
-      y += (200 * value) / MAX_OFFSET;
-      y += (x / cx) * widthRef.current * 0.1;
-
+      
+      const adjustedY = y - Math.pow(o, 2) * 200 + 
+                       (200 * value) / MAX_OFFSET + 
+                       (x / cx) * widthRef.current * 0.1;
+      
       ctx.globalAlpha = 1 - value / MAX_OFFSET;
       
       // Only use shadow blur on desktop
       if (!isMobileRef.current) {
         ctx.shadowBlur = SHADOW_STRENGTH * o;
       }
-
-      ctx.lineTo(cx + x, cy + y);
+      
+      ctx.lineTo(cx + x, cy + adjustedY);
       ctx.stroke();
-
+      
       ctx.beginPath();
-      ctx.moveTo(cx + x, cy + y);
+      ctx.moveTo(cx + x, cy + adjustedY);
     }
-
-    // Simplified ending for mobile
+    
+    // Draw final line
     if (isMobileRef.current) {
       ctx.lineTo(cx, cy - 100);
     } else {
@@ -225,78 +153,123 @@ export const Spiral: React.FC = () => {
       ctx.lineTo(cx, 0);
     }
     ctx.stroke();
-  };
-
-  // Optimized mouse handlers with DOM batching
-  const onMouseDown = useCallback((event: MouseEvent): void => {
-    // Use DOM batch for reads
-    domBatch.read(() => {
-      lastXRef.current = event.clientX;
-      lastYRef.current = event.clientY;
-    })();
-
-    document.addEventListener("mousemove", onMouseMove, passiveEventOptions());
-    document.addEventListener("mouseup", onMouseUp, passiveEventOptions());
   }, []);
 
-  const onMouseMove = useCallback((event: MouseEvent): void => {
-    // Use DOM batch for reads
-    domBatch.read(() => {
-      const vx = (event.clientX - lastXRef.current) / 100;
-      const vy = (event.clientY - lastYRef.current) / 100;
-      const clientY = event.clientY;
-      const clientX = event.clientX;
-      
-      if (clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
-      else if (clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
-      else velocityTargetRef.current = vx + vy;
+  // Mouse interaction handlers
+  const onMouseDown = useCallback((event: MouseEvent) => {
+    lastXRef.current = event.clientX;
+    lastYRef.current = event.clientY;
+    
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }, []);
   
-      lastXRef.current = clientX;
-      lastYRef.current = clientY;
-    })();
+  const onMouseMove = useCallback((event: MouseEvent) => {
+    const vx = (event.clientX - lastXRef.current) / 100;
+    const vy = (event.clientY - lastYRef.current) / 100;
+    
+    if (event.clientY < heightRef.current / 2) {
+      velocityTargetRef.current = -vx + vy;
+    } else if (event.clientX > widthRef.current / 2) {
+      velocityTargetRef.current = vx - vy;
+    } else {
+      velocityTargetRef.current = vx + vy;
+    }
+    
+    lastXRef.current = event.clientX;
+    lastYRef.current = event.clientY;
+  }, []);
+  
+  const onMouseUp = useCallback(() => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
   }, []);
 
-  const onMouseUp = useCallback((): void => {
-    document.removeEventListener("mousemove", onMouseMove, passiveEventOptions());
-    document.removeEventListener("mouseup", onMouseUp, passiveEventOptions());
-  }, [onMouseMove]);
-
-  // Optimized touch handlers with DOM batching
-  const onTouchStart = useCallback((event: TouchEvent): void => {
+  // Touch interaction handlers
+  const onTouchStart = useCallback((event: TouchEvent) => {
     event.preventDefault();
-
-    // Use DOM batch for reads
-    domBatch.read(() => {
-      lastXRef.current = event.touches[0].clientX;
-      lastYRef.current = event.touches[0].clientY;
-    })();
-
+    
+    lastXRef.current = event.touches[0].clientX;
+    lastYRef.current = event.touches[0].clientY;
+    
     document.addEventListener("touchmove", onTouchMove);
     document.addEventListener("touchend", onTouchEnd);
   }, []);
-
-  const onTouchMove = useCallback((event: TouchEvent): void => {
-    // Use DOM batch for reads
-    domBatch.read(() => {
-      const touch = event.touches[0];
-      const vx = (touch.clientX - lastXRef.current) / 100;
-      const vy = (touch.clientY - lastYRef.current) / 100;
-      const clientY = touch.clientY;
-      const clientX = touch.clientX;
-
-      if (clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
-      else if (clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
-      else velocityTargetRef.current = vx + vy;
-
-      lastXRef.current = clientX;
-      lastYRef.current = clientY;
-    })();
+  
+  const onTouchMove = useCallback((event: TouchEvent) => {
+    const touch = event.touches[0];
+    const vx = (touch.clientX - lastXRef.current) / 100;
+    const vy = (touch.clientY - lastYRef.current) / 100;
+    
+    if (touch.clientY < heightRef.current / 2) {
+      velocityTargetRef.current = -vx + vy;
+    } else if (touch.clientX > widthRef.current / 2) {
+      velocityTargetRef.current = vx - vy;
+    } else {
+      velocityTargetRef.current = vx + vy;
+    }
+    
+    lastXRef.current = touch.clientX;
+    lastYRef.current = touch.clientY;
   }, []);
-
-  const onTouchEnd = useCallback((): void => {
+  
+  const onTouchEnd = useCallback(() => {
     document.removeEventListener("touchmove", onTouchMove);
     document.removeEventListener("touchend", onTouchEnd);
-  }, [onTouchMove]);
-  return <canvas ref={canvasRef} className="fixed inset-0 w-full h-ful pointer-events-none"></canvas>;
-};
+  }, []);
 
+  // Initialize canvas and start animation
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    
+    // Set initial dimensions
+    resizeCanvas();
+    
+    // Get context
+    const ctx = canvasRef.current.getContext('2d');
+    if (ctx) {
+      contextRef.current = ctx;
+      
+      // Add event listeners
+      window.addEventListener('resize', resize);
+      canvasRef.current.addEventListener('mousedown', onMouseDown);
+      canvasRef.current.addEventListener('touchstart', onTouchStart);
+      
+      // Start animation loop
+      animationFrameRef.current = requestAnimationFrame(step);
+    }
+    
+    // Cleanup
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      window.removeEventListener('resize', resize);
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener('mousedown', onMouseDown);
+        canvasRef.current.removeEventListener('touchstart', onTouchStart);
+      }
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, []);
+
+  return (
+    <canvas 
+      ref={canvasRef}
+      className="fixed inset-0 w-full h-full"
+      style={{
+        zIndex: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        backgroundColor: 'transparent'
+      }}
+    />
+  );
+};
