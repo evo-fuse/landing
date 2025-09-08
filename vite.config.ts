@@ -1,10 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+// @ts-ignore
+import { bundleAnalyzer, removeConsolePlugin, inlineCriticalCssPlugin } from './src/plugins/vite-plugin-bundle-analyzer'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    removeConsolePlugin(),
+    inlineCriticalCssPlugin({
+      cssFiles: ['index']
+    }),
+    // Only use bundle analyzer when needed (disabled by default)
+    process.env.ANALYZE === 'true' && bundleAnalyzer({
+      open: true,
+      filename: 'bundle-stats.html'
+    })
+  ].filter(Boolean),
   server: {
     host: "0.0.0.0"
   },
@@ -15,18 +28,61 @@ export default defineConfig({
     cssMinify: true,
     assetsInlineLimit: 4096, // 4kb - inline small assets
     chunkSizeWarningLimit: 1000, // 1000kb warning limit
+    terserOptions: {
+      compress: {
+        // Remove console logs in production
+        drop_console: true,
+        // Remove debugger statements
+        drop_debugger: true,
+        // More aggressive optimizations
+        passes: 3,
+      },
+    },
     rollupOptions: {
       output: {
+        // Optimize chunk naming for better caching
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
         // Chunk splitting strategy
-        manualChunks: {
-          vendor: [
-            'react', 
-            'react-dom', 
-            'react-router-dom',
-            'framer-motion'
-          ],
-          // Split other large dependencies
-          animations: ['gsap', 'react-spring', 'lottie-react'],
+        manualChunks: (id) => {
+          // Critical path - keep these small and inline them
+          if (id.includes('src/components/Layout.tsx') || 
+              id.includes('src/components/Header.tsx') ||
+              id.includes('src/App.tsx')) {
+            return 'critical';
+          }
+          
+          // Core React dependencies
+          if (id.includes('node_modules/react/') || 
+              id.includes('node_modules/react-dom/') || 
+              id.includes('node_modules/scheduler/')) {
+            return 'react-core';
+          }
+          
+          // React Router
+          if (id.includes('node_modules/react-router') || 
+              id.includes('node_modules/@remix-run')) {
+            return 'routing';
+          }
+          
+          // Animation libraries
+          if (id.includes('node_modules/framer-motion') || 
+              id.includes('node_modules/@motionone')) {
+            return 'animations';
+          }
+          
+          // Other animation libraries
+          if (id.includes('node_modules/gsap') || 
+              id.includes('node_modules/react-spring') || 
+              id.includes('node_modules/lottie-react')) {
+            return 'animations-extra';
+          }
+          
+          // Vendor code
+          if (id.includes('node_modules/')) {
+            return 'vendor';
+          }
         }
       }
     },

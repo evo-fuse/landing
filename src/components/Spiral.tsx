@@ -1,4 +1,5 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { debounce, domBatch, passiveEventOptions } from "../utils/performance";
 
 export const Spiral: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -82,8 +83,8 @@ export const Spiral: React.FC = () => {
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('resize', resize, passiveEventOptions());
+        window.removeEventListener('mousedown', onMouseDown, passiveEventOptions());
         document.removeEventListener('touchstart', onTouchStart);
       };
     }
@@ -92,29 +93,30 @@ export const Spiral: React.FC = () => {
   const setup = (): void => {
     resize();
     
-    // Add event listeners
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('touchstart', onTouchStart);
+    // Add event listeners with passive options where possible
+    window.addEventListener('resize', resize, passiveEventOptions());
+    window.addEventListener('mousedown', onMouseDown, passiveEventOptions());
+    document.addEventListener('touchstart', onTouchStart); // Can't be passive due to preventDefault
   };
 
-  // Throttled resize function for better performance
-  const resizeTimeoutRef = useRef<number | null>(null);
-  
-  const resize = (): void => {
-    // Clear previous timeout to implement throttling
-    if (resizeTimeoutRef.current) {
-      window.clearTimeout(resizeTimeoutRef.current);
-    }
+  // Create a debounced resize handler to prevent forced reflows
+  const resizeCanvas = useCallback(() => {
+    if (!canvasRef.current) return;
     
-    // Throttle resize to once per 100ms
-    resizeTimeoutRef.current = window.setTimeout(() => {
+    // Use DOM batching to separate read and write operations
+    // First read all DOM values
+    const readDimensions = domBatch.read(() => {
+      const dpr = window.devicePixelRatio || 1;
+      const displayWidth = window.innerWidth;
+      const displayHeight = window.innerHeight;
+      return { dpr, displayWidth, displayHeight };
+    });
+    
+    // Then perform all DOM writes
+    domBatch.write(() => {
+      const { dpr, displayWidth, displayHeight } = readDimensions();
+      
       if (canvasRef.current) {
-        // Use device pixel ratio for better rendering on high DPI screens
-        const dpr = window.devicePixelRatio || 1;
-        const displayWidth = window.innerWidth;
-        const displayHeight = window.innerHeight;
-        
         canvasRef.current.width = displayWidth * dpr;
         canvasRef.current.height = displayHeight * dpr;
         
@@ -129,8 +131,11 @@ export const Spiral: React.FC = () => {
           context.scale(dpr, dpr);
         }
       }
-    }, 100);
-  };
+    });
+  }, [context]);
+  
+  // Create a debounced version of the resize handler
+  const resize = debounce(resizeCanvas, 100);
 
   const step = (): void => {
     if (!isVisible) return;
@@ -212,56 +217,75 @@ export const Spiral: React.FC = () => {
     context.stroke();
   };
 
-  const onMouseDown = (event: MouseEvent): void => {
-    lastXRef.current = event.clientX;
-    lastYRef.current = event.clientY;
+  // Optimized mouse handlers with DOM batching
+  const onMouseDown = useCallback((event: MouseEvent): void => {
+    // Use DOM batch for reads
+    domBatch.read(() => {
+      lastXRef.current = event.clientX;
+      lastYRef.current = event.clientY;
+    })();
 
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  };
+    document.addEventListener("mousemove", onMouseMove, passiveEventOptions());
+    document.addEventListener("mouseup", onMouseUp, passiveEventOptions());
+  }, []);
 
-  const onMouseMove = (event: MouseEvent): void => {
-    const vx = (event.clientX - lastXRef.current) / 100;
-    const vy = (event.clientY - lastYRef.current) / 100;
+  const onMouseMove = useCallback((event: MouseEvent): void => {
+    // Use DOM batch for reads
+    domBatch.read(() => {
+      const vx = (event.clientX - lastXRef.current) / 100;
+      const vy = (event.clientY - lastYRef.current) / 100;
+      const clientY = event.clientY;
+      const clientX = event.clientX;
+      
+      if (clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
+      else if (clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
+      else velocityTargetRef.current = vx + vy;
+  
+      lastXRef.current = clientX;
+      lastYRef.current = clientY;
+    })();
+  }, []);
 
-    if (event.clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
-    else if (event.clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
-    else velocityTargetRef.current = vx + vy;
+  const onMouseUp = useCallback((): void => {
+    document.removeEventListener("mousemove", onMouseMove, passiveEventOptions());
+    document.removeEventListener("mouseup", onMouseUp, passiveEventOptions());
+  }, [onMouseMove]);
 
-    lastXRef.current = event.clientX;
-    lastYRef.current = event.clientY;
-  };
-
-  const onMouseUp = (): void => {
-    document.removeEventListener("mousemove", onMouseMove);
-    document.removeEventListener("mouseup", onMouseUp);
-  };
-
-  const onTouchStart = (event: TouchEvent): void => {
+  // Optimized touch handlers with DOM batching
+  const onTouchStart = useCallback((event: TouchEvent): void => {
     event.preventDefault();
 
-    lastXRef.current = event.touches[0].clientX;
-    lastYRef.current = event.touches[0].clientY;
+    // Use DOM batch for reads
+    domBatch.read(() => {
+      lastXRef.current = event.touches[0].clientX;
+      lastYRef.current = event.touches[0].clientY;
+    })();
 
     document.addEventListener("touchmove", onTouchMove);
     document.addEventListener("touchend", onTouchEnd);
-  };
+  }, []);
 
-  const onTouchMove = (event: TouchEvent): void => {
-    const vx = (event.touches[0].clientX - lastXRef.current) / 100;
-    const vy = (event.touches[0].clientY - lastYRef.current) / 100;
+  const onTouchMove = useCallback((event: TouchEvent): void => {
+    // Use DOM batch for reads
+    domBatch.read(() => {
+      const touch = event.touches[0];
+      const vx = (touch.clientX - lastXRef.current) / 100;
+      const vy = (touch.clientY - lastYRef.current) / 100;
+      const clientY = touch.clientY;
+      const clientX = touch.clientX;
 
-    if (event.touches[0].clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
-    else if (event.touches[0].clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
-    else velocityTargetRef.current = vx + vy;
+      if (clientY < heightRef.current / 2) velocityTargetRef.current = -vx + vy;
+      else if (clientX > widthRef.current / 2) velocityTargetRef.current = vx - vy;
+      else velocityTargetRef.current = vx + vy;
 
-    lastXRef.current = event.touches[0].clientX;
-    lastYRef.current = event.touches[0].clientY;
-  };
+      lastXRef.current = clientX;
+      lastYRef.current = clientY;
+    })();
+  }, []);
 
-  const onTouchEnd = (): void => {
+  const onTouchEnd = useCallback((): void => {
     document.removeEventListener("touchmove", onTouchMove);
     document.removeEventListener("touchend", onTouchEnd);
-  };
+  }, [onTouchMove]);
   return <canvas ref={canvasRef} className="fixed inset-0 w-full h-ful pointer-events-none"></canvas>;
 };
