@@ -7,8 +7,6 @@ import { visualizer } from 'rollup-plugin-visualizer'
 export default defineConfig(({ mode }) => ({
   plugins: [
     react({
-      // Enable fast refresh with optimized settings
-      fastRefresh: true,
       // Improve JSX runtime performance
       jsxRuntime: 'automatic',
       // Use babel for production builds only
@@ -21,7 +19,7 @@ export default defineConfig(({ mode }) => ({
         presets: [
           ['@babel/preset-env', { targets: { browsers: 'defaults' } }]
         ]
-      } : false
+      } : undefined
     }),
     // Only use bundle analyzer when needed (disabled by default)
     process.env.ANALYZE === 'true' && visualizer({
