@@ -9,16 +9,16 @@ if (
   "serviceWorker" in navigator &&
   import.meta.env.PROD
 ) {
-  window.addEventListener("load", () => {
+  window.addEventListener("load", function() {
     navigator.serviceWorker
       .register("/service-worker.js")
-      .then((registration) => {
+      .then(function(registration) {
         console.log(
           "Service Worker registered with scope:",
           registration.scope
         );
       })
-      .catch(() => {
+      .catch(function() {
         console.log("Service Worker registration failed");
       });
   });
@@ -29,15 +29,19 @@ if (typeof performance !== "undefined") {
   performance.mark("app-start");
 }
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+// Render the app
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+}
 
 // Measure and log initial render time
 if (typeof window !== "undefined") {
-  window.addEventListener("load", () => {
+  window.addEventListener("load", function() {
     if (typeof performance !== "undefined") {
       performance.mark("app-loaded");
       try {
@@ -48,7 +52,7 @@ if (typeof window !== "undefined") {
             "App render time: " + measurements[0].duration.toFixed(2) + "ms"
           );
         }
-      } catch (e) {
+      } catch (error) {
         // Silently handle any performance API errors
       }
     }

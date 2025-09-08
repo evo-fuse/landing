@@ -1,56 +1,60 @@
 // Service Worker for EvoFuse Game Site
-const CACHE_NAME = 'evofuse-cache-v1';
+const CACHE_NAME = "evofuse-cache-v1";
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/logo.png',
-  '/manifest.json',
-  '/assets/index-DmrrAyrQ.js',
-  '/assets/index-Cvq3jtLo.css'
+  "/",
+  "/index.html",
+  "/logo.png",
+  "/manifest.json"
+  // Dynamic assets are handled by the fetch event handler
 ];
 
 // Install event - cache core assets
-self.addEventListener('install', event => {
+self.addEventListener("install", function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
+      .then(function(cache) {
         // Use Promise.allSettled instead of addAll to handle individual failures
         return Promise.allSettled(
-          urlsToCache.map(url => 
-            cache.add(url).catch(error => {
-              console.log('Failed to cache:', url);
+          urlsToCache.map(function(url) {
+            return cache.add(url).catch(function() {
+              console.log("Failed to cache:", url);
               return Promise.resolve(); // Continue despite error
-            })
-          )
+            });
+          })
         );
       })
-      .then(() => self.skipWaiting())
-      .catch(error => {
-        console.log('Service worker install failed:', error);
+      .then(function() {
+        return self.skipWaiting();
+      })
+      .catch(function(error) {
+        console.log("Service worker install failed:", error);
       })
   );
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', event => {
+self.addEventListener("activate", function(event) {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then(function(cacheNames) {
       return Promise.all(
-        cacheNames.map(cacheName => {
+        cacheNames.map(function(cacheName) {
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
+          return Promise.resolve();
         })
       );
-    }).then(() => self.clients.claim())
+    }).then(function() {
+      return self.clients.claim();
+    })
   );
 });
 
 // Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
+self.addEventListener("fetch", function(event) {
   try {
     // Skip cross-origin requests and non-GET requests
-    if (!event.request.url.startsWith(self.location.origin) || event.request.method !== 'GET') {
+    if (!event.request.url.startsWith(self.location.origin) || event.request.method !== "GET") {
       return;
     }
 
@@ -61,28 +65,31 @@ self.addEventListener('fetch', event => {
     }
 
     // For HTML pages - network first, then cache
-    if (event.request.mode === 'navigate') {
+    if (event.request.mode === "navigate") {
       event.respondWith(
         fetch(event.request)
-          .then(response => {
+          .then(function(response) {
             // Cache the latest version of the page
             if (response.ok) {
               const clonedResponse = response.clone();
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(event.request, clonedResponse).catch(() => {
+              caches.open(CACHE_NAME).then(function(cache) {
+                cache.put(event.request, clonedResponse).catch(function() {
                   // Silently handle cache put failures
                 });
-              }).catch(() => {
+              }).catch(function() {
                 // Silently handle cache open failures
               });
             }
             return response;
           })
-          .catch(() => {
+          .catch(function() {
             // If network fails, try to serve from cache
-            return caches.match(event.request).catch(() => {
+            return caches.match(event.request).catch(function() {
               // If cache match fails, return a fallback response
-              return new Response('Network and cache both failed', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+              return new Response("Network and cache both failed", { 
+                status: 503, 
+                headers: { "Content-Type": "text/plain" } 
+              });
             });
           })
       );
@@ -92,7 +99,7 @@ self.addEventListener('fetch', event => {
     // For assets - cache first, then network
     event.respondWith(
       caches.match(event.request)
-        .then(cachedResponse => {
+        .then(function(cachedResponse) {
           if (cachedResponse) {
             // Return cached response
             return cachedResponse;
@@ -100,7 +107,7 @@ self.addEventListener('fetch', event => {
 
           // If not in cache, fetch from network
           return fetch(event.request)
-            .then(response => {
+            .then(function(response) {
               // Don't cache non-successful responses
               if (!response || !response.ok) {
                 return response;
@@ -109,32 +116,38 @@ self.addEventListener('fetch', event => {
               // Clone the response as it can only be consumed once
               const responseToCache = response.clone();
               caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(event.request, responseToCache).catch(() => {
+                .then(function(cache) {
+                  cache.put(event.request, responseToCache).catch(function() {
                     // Silently handle cache put failures
                   });
                 })
-                .catch(() => {
+                .catch(function() {
                   // Silently handle cache open failures
                 });
 
               return response;
             })
-            .catch(error => {
-              console.log('Fetch failed:', error);
+            .catch(function() {
+              console.log("Fetch failed for:", event.request.url);
               // Return a fallback response
-              return new Response('Network request failed', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+              return new Response("Network request failed", { 
+                status: 503, 
+                headers: { "Content-Type": "text/plain" } 
+              });
             });
         })
-        .catch(error => {
-          console.log('Cache match failed:', error);
+        .catch(function() {
+          console.log("Cache match failed for:", event.request.url);
           // Return a fallback response
-          return fetch(event.request).catch(() => {
-            return new Response('Cache and network both failed', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+          return fetch(event.request).catch(function() {
+            return new Response("Cache and network both failed", { 
+              status: 503, 
+              headers: { "Content-Type": "text/plain" } 
+            });
           });
         })
     );
   } catch (error) {
-    console.log('Service worker fetch error:', error);
+    console.log("Service worker fetch error:", error);
   }
 });
