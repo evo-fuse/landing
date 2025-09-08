@@ -7,44 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
     <!-- Performance optimizations -->
-    <!-- DNS prefetch for external domains -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    
     <!-- Preconnect to critical origins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.evofuse.xyz">
-    <link rel="preconnect" href="https://www.googletagmanager.com">
     
     <!-- Preload critical assets -->
     <!-- We're using an inline SVG for the logo now, no need to preload the image -->
     
     <!-- Preload critical JavaScript -->
     <link rel="modulepreload" href="/src/main.tsx">
-    
-    <!-- Inline critical CSS to eliminate render blocking -->
-    <style>
-      /* Critical CSS - Only what's needed for above-the-fold content */
-      body{background-color:#000;color:#1a202c;margin:0;padding:0}html,body,#root{width:100%;height:100%;position:relative;overflow-x:hidden}.dark body{color:#f7fafc}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}header{background-color:#000;position:sticky;top:0;z-index:50;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.container{width:100%;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}.flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.h-screen{height:100vh}.w-full{width:100%}.font-bold{font-weight:700}.text-white{color:#fff}.rounded-full{border-radius:9999px}.border-t-2,.border-b-2{border-style:solid}.border-purple-500{border-color:#8b5cf6}.font-display{font-family:'Montserrat',sans-serif;font-display:swap}.defer-visibility{opacity:0;transition:opacity .3s ease}.flex-col{flex-direction:column}.min-h-screen{min-height:100vh}.relative{position:relative}
-    </style>
-    
+
     <!-- Defer non-critical CSS -->
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
-    
-    <script>
-      // Defer loading of non-critical font weights
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Montserrat:wght@500;600;800&display=swap';
-          document.head.appendChild(link);
-        }, 2000); // 2 second delay
-      });
-    </script>
-    
+
     <!-- SEO -->
     <title>EvoFuse - Classic Games on Fuse Network</title>
     <meta name="description" content="Play classic games reimagined on the Fuse Network blockchain. Experience 2048, Tetris, Snake and more with blockchain rewards." />

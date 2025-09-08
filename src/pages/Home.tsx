@@ -62,7 +62,7 @@ const Home = () => {
                 Ev
                 <motion.img 
                   src={darklogo} 
-                  className="w-9 h-auto pt-3 mr-2"
+                  className="w-9 h-auto pt-5 ml-1 mr-2"
                   animate={{ 
                     rotate: [0, 5, -5, 0],
                     scale: [1, 1.1, 1]
