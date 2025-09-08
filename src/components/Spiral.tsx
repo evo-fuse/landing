@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { debounce, domBatch, passiveEventOptions } from "../utils/performance";
 
 export const Spiral: React.FC = () => {

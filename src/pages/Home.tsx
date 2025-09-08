@@ -1,5 +1,5 @@
 import { Layout, DiscoverGames } from "../components";
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 
 const darklogo = "https://i.ibb.co/HLnWv6Lg/Logo.png";
