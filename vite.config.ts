@@ -1,19 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-// @ts-ignore
-import { bundleAnalyzer, removeConsolePlugin, inlineCriticalCssPlugin } from './src/plugins/vite-plugin-bundle-analyzer'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    removeConsolePlugin(),
-    inlineCriticalCssPlugin({
-      cssFiles: ['index']
-    }),
     // Only use bundle analyzer when needed (disabled by default)
-    process.env.ANALYZE === 'true' && bundleAnalyzer({
+    process.env.ANALYZE === 'true' && require('rollup-plugin-visualizer').visualizer({
       open: true,
       filename: 'bundle-stats.html'
     })
