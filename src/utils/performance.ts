@@ -64,11 +64,7 @@ class DOMBatch {
    */
   private process(): void {
     // Process all read operations first
-    const reads = this.readQueue.slice();
     this.readQueue = [];
-    
-    // Get all read values
-    const readValues = reads.map(read => read());
     
     // Process all write operations
     const writes = this.writeQueue.slice();
