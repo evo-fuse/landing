@@ -1,51 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-X2EDD49SFP"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-X2EDD49SFP");
+    </script>
     <link rel="icon" type="image/svg+xml" href="/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
+
     <!-- Performance optimizations -->
     <!-- Preconnect to critical origins -->
-    <link rel="preconnect" href="https://www.evofuse.xyz">
-    
+    <link rel="preconnect" href="https://www.evofuse.xyz" />
+
     <!-- Preload critical assets -->
     <!-- We're using an inline SVG for the logo now, no need to preload the image -->
-    
+
     <!-- Preload critical JavaScript -->
-    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="modulepreload" href="/src/main.tsx" />
 
     <!-- Defer non-critical CSS -->
-    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
+    <link
+      rel="preload"
+      href="/src/index.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/src/index.css" /></noscript>
 
     <!-- SEO -->
-    <title>EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More</title>
-    <meta name="description" content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards." />
+    <title>
+      EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More
+    </title>
+    <meta
+      name="description"
+      content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards."
+    />
     <meta name="theme-color" content="#000000" />
     <link rel="canonical" href="https://www.evofuse.xyz/" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-    
+
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.evofuse.xyz/" />
-    <meta property="og:title" content="EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More" />
-    <meta property="og:description" content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards." />
+    <meta
+      property="og:title"
+      content="EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More"
+    />
+    <meta
+      property="og:description"
+      content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards."
+    />
     <meta property="og:image" content="https://www.evofuse.xyz/logo.png" />
     <meta property="og:image:alt" content="EvoFuse Logo" />
     <meta property="og:site_name" content="EvoFuse" />
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More" />
-    <meta name="twitter:description" content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards." />
+    <meta
+      name="twitter:title"
+      content="EvoFuse - Play Classic Blockchain Games with Rewards | 2048, Tetris & More"
+    />
+    <meta
+      name="twitter:description"
+      content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards."
+    />
     <meta name="twitter:image" content="https://www.evofuse.xyz/logo.png" />
-    
+
     <!-- PWA support -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <div id="root"></div>
