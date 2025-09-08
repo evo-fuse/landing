@@ -51,6 +51,7 @@
       content="Discover EvoFuse's blockchain-powered classic games with real crypto rewards. Play 2048, Tetris, and Snake on Fuse Network with seamless gameplay, earn tokens, and compete on global leaderboards."
     />
     <meta name="theme-color" content="#000000" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://www.evofuse.xyz/" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
@@ -88,6 +89,50 @@
       content="black-translucent"
     />
     <link rel="manifest" href="/manifest.json" />
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "EvoFuse",
+      "url": "https://www.evofuse.xyz/",
+      "description": "Play classic blockchain games with crypto rewards on Fuse Network",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.evofuse.xyz/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "EvoFuse",
+      "url": "https://www.evofuse.xyz/",
+      "logo": "https://www.evofuse.xyz/logo.png",
+      "sameAs": [
+        "https://twitter.com/evofuse",
+        "https://discord.gg/evofuse"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "EvoFuse 2048",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Play 2048 with blockchain rewards on the Fuse Network"
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
