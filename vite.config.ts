@@ -1,27 +1,68 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
-    react(),
+    react({
+      // Enable fast refresh with optimized settings
+      fastRefresh: true,
+      // Improve JSX runtime performance
+      jsxRuntime: 'automatic',
+      // Use babel for production builds only
+      babel: mode === 'production' ? {
+        plugins: [
+          // Remove prop types in production
+          ['transform-react-remove-prop-types', { removeImport: true }]
+        ],
+        // Optimize production builds
+        presets: [
+          ['@babel/preset-env', { targets: { browsers: 'defaults' } }]
+        ]
+      } : false
+    }),
     // Only use bundle analyzer when needed (disabled by default)
-    process.env.ANALYZE === 'true' && require('rollup-plugin-visualizer').visualizer({
+    process.env.ANALYZE === 'true' && visualizer({
       open: true,
-      filename: 'bundle-stats.html'
+      filename: 'bundle-stats.html',
+      gzipSize: true,
+      brotliSize: true
     })
   ].filter(Boolean),
+  
+  // Esbuild optimizations
+  esbuild: {
+    // Remove console.log in production
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
+    // Minify with better settings
+    minifyIdentifiers: mode === 'production',
+    minifySyntax: mode === 'production',
+    minifyWhitespace: mode === 'production',
+    // Target modern browsers
+    target: 'es2020',
+    // Improve tree-shaking
+    treeShaking: true
+  },
+  
   server: {
     host: "0.0.0.0"
   },
+  
   build: {
     // Optimize build output
-    target: 'es2015',
+    target: 'es2020', // Target modern browsers for better performance
     minify: 'terser',
     cssMinify: true,
     assetsInlineLimit: 4096, // 4kb - inline small assets
     chunkSizeWarningLimit: 1000, // 1000kb warning limit
+    // Enable module concatenation for better tree-shaking
+    modulePreload: true,
+    // Report on performance
+    reportCompressedSize: true,
+    // Improve CSS handling
+    cssCodeSplit: true,
     terserOptions: {
       compress: {
         // Remove console logs in production
@@ -30,8 +71,25 @@ export default defineConfig({
         drop_debugger: true,
         // More aggressive optimizations
         passes: 3,
+        // Additional optimizations
+        ecma: 2020,
+        toplevel: true,
+        unsafe_arrows: true,
+        unsafe_methods: true,
+        pure_getters: true
       },
+      format: {
+        // Improve output size
+        comments: false,
+        ecma: 2020
+      },
+      // Improve minification
+      module: true,
+      toplevel: true
     },
+    // Generate sourcemaps only for development, not for production
+    sourcemap: mode !== 'production',
+    
     rollupOptions: {
       output: {
         // Optimize chunk naming for better caching
@@ -99,21 +157,23 @@ export default defineConfig({
           }
         }
       }
-    },
-    // Enable source maps for production
-    sourcemap: true,
+    }
   },
+  
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
     }
   },
+  
   // Optimize dependencies pre-bundling
   optimizeDeps: {
+    // Force include critical dependencies
     include: [
       'react', 
       'react-dom', 
-      'react-router-dom'
+      'react-router-dom',
+      'react-icons/fa'
     ],
     // Exclude heavy libraries from initial bundle
     exclude: [
@@ -121,6 +181,18 @@ export default defineConfig({
       'gsap',
       'react-spring',
       'lottie-react'
-    ]
+    ],
+    // Improve dependency optimization
+    esbuildOptions: {
+      target: 'es2020',
+      // Better tree shaking
+      treeShaking: true,
+      // Optimize for modern browsers
+      supported: {
+        'async-await': true,
+        'dynamic-import': true,
+        'import-meta': true
+      }
+    }
   }
-})
+}))

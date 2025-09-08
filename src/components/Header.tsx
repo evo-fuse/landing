@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-const Header = () => {
+const Header = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Memoize the toggle function to prevent recreation on each render
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
+  
   return (
     <header className="bg-black shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -41,7 +46,7 @@ const Header = () => {
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center">
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={toggleMenu}
             className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             aria-label="Toggle menu"
           >
@@ -80,6 +85,6 @@ const Header = () => {
       )}
     </header>
   );
-};
+});
 
 export default Header;

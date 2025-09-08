@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { Spiral } from './Spiral';
@@ -6,7 +7,8 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+// Memoize the Layout component to prevent unnecessary re-renders
+const Layout = memo(({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen relative">
       <Header />
@@ -17,6 +19,6 @@ const Layout = ({ children }: LayoutProps) => {
       <Footer />
     </div>
   );
-};
+});
 
 export default Layout;

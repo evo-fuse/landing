@@ -3,9 +3,9 @@ import { debounce, domBatch, passiveEventOptions } from "../utils/performance";
 
 export const Spiral: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [isVisible, setIsVisible] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const isVisibleRef = useRef<boolean>(true);
+  const isMobileRef = useRef<boolean>(false);
   
   // Use refs for values that need to persist between renders but don't trigger re-renders
   const timeRef = useRef(0);
@@ -17,36 +17,47 @@ export const Spiral: React.FC = () => {
   const lastYRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Reduce complexity for mobile devices
-  const MAX_OFFSET = isMobile ? 200 : 400;
-  const SPACING = isMobile ? 8 : 4;
-  const POINTS = MAX_OFFSET / SPACING;
-  const PEAK = MAX_OFFSET * 0.25;
+  // Reduce complexity for mobile devices - use refs to avoid re-renders
+  const getMaxOffset = () => isMobileRef.current ? 200 : 400;
+  const getSpacing = () => isMobileRef.current ? 8 : 4;
+  const getPoints = () => getMaxOffset() / getSpacing();
+  const getPeak = () => getMaxOffset() * 0.25;
   const POINTS_PER_LAP = 6;
-  const SHADOW_STRENGTH = isMobile ? 2 : 6;
+  const getShadowStrength = () => isMobileRef.current ? 2 : 6;
 
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      isMobileRef.current = window.innerWidth < 768;
     };
     
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const debouncedCheckMobile = debounce(checkMobile, 250);
+    window.addEventListener('resize', debouncedCheckMobile, passiveEventOptions());
     
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', debouncedCheckMobile, passiveEventOptions());
     };
   }, []);
 
   // Initialize canvas context
   useEffect(() => {
     if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d', { alpha: true });
+      const ctx = canvasRef.current.getContext('2d', { alpha: true, willReadFrequently: false });
       if (ctx) {
-        setContext(ctx);
+        contextRef.current = ctx;
+        setup();
       }
     }
+    
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      window.removeEventListener('resize', resize, passiveEventOptions());
+      window.removeEventListener('mousedown', onMouseDown, passiveEventOptions());
+      document.removeEventListener('touchstart', onTouchStart);
+    };
   }, []);
   
   // Set up intersection observer to only animate when visible
@@ -55,7 +66,14 @@ export const Spiral: React.FC = () => {
     
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        setIsVisible(entry.isIntersecting);
+        isVisibleRef.current = entry.isIntersecting;
+        
+        if (entry.isIntersecting && !animationFrameRef.current) {
+          animationFrameRef.current = requestAnimationFrame(step);
+        } else if (!entry.isIntersecting && animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
       });
     }, { threshold: 0.1 });
     
@@ -68,27 +86,6 @@ export const Spiral: React.FC = () => {
     };
   }, []);
   
-  // Set up animation and event listeners after context is set
-  useEffect(() => {
-    if (context) {
-      setup();
-      
-      // Only animate when component is visible
-      if (isVisible) {
-        animationFrameRef.current = requestAnimationFrame(step);
-      }
-      
-      // Clean up function
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-        window.removeEventListener('resize', resize, passiveEventOptions());
-        window.removeEventListener('mousedown', onMouseDown, passiveEventOptions());
-        document.removeEventListener('touchstart', onTouchStart);
-      };
-    }
-  }, [context, isVisible]);
 
   const setup = (): void => {
     resize();
@@ -97,6 +94,11 @@ export const Spiral: React.FC = () => {
     window.addEventListener('resize', resize, passiveEventOptions());
     window.addEventListener('mousedown', onMouseDown, passiveEventOptions());
     document.addEventListener('touchstart', onTouchStart); // Can't be passive due to preventDefault
+    
+    // Start animation if visible
+    if (isVisibleRef.current && !animationFrameRef.current) {
+      animationFrameRef.current = requestAnimationFrame(step);
+    }
   };
 
   // Create a debounced resize handler to prevent forced reflows
@@ -127,18 +129,21 @@ export const Spiral: React.FC = () => {
         heightRef.current = displayHeight;
         
         // Scale the context according to device pixel ratio
-        if (context) {
-          context.scale(dpr, dpr);
+        if (contextRef.current) {
+          contextRef.current.scale(dpr, dpr);
         }
       }
     });
-  }, [context]);
+  }, []);
   
   // Create a debounced version of the resize handler
   const resize = debounce(resizeCanvas, 100);
 
   const step = (): void => {
-    if (!isVisible) return;
+    if (!isVisibleRef.current) {
+      animationFrameRef.current = null;
+      return;
+    }
     
     timeRef.current += velocityRef.current;
     velocityRef.current += (velocityTargetRef.current - velocityRef.current) * 0.3;
@@ -146,37 +151,42 @@ export const Spiral: React.FC = () => {
     clear();
     render();
 
-    // The animation frame is now managed in the useEffect
     animationFrameRef.current = requestAnimationFrame(step);
   };
 
   const clear = (): void => {
-    if (context) {
-      context.clearRect(0, 0, widthRef.current, heightRef.current);
+    if (contextRef.current) {
+      contextRef.current.clearRect(0, 0, widthRef.current, heightRef.current);
     }
   };
 
   const render = (): void => {
-    if (!context || !isVisible) return;
+    if (!contextRef.current || !isVisibleRef.current) return;
 
     let x: number;
     let y: number;
     const cx = widthRef.current / 2;
     const cy = heightRef.current / 2;
+    const ctx = contextRef.current;
+    const MAX_OFFSET = getMaxOffset();
+    const SPACING = getSpacing();
+    const POINTS = getPoints();
+    const PEAK = getPeak();
+    const SHADOW_STRENGTH = getShadowStrength();
 
     // Performance optimization - skip shadow effects on mobile
-    context.globalCompositeOperation = "lighter";
-    context.strokeStyle = "#fff";
-    context.lineWidth = isMobile ? 1 : 2;
-    context.beginPath();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = isMobileRef.current ? 1 : 2;
+    ctx.beginPath();
     
     // Only use shadow effects on desktop for better performance
-    if (!isMobile) {
-      context.shadowColor = "#fff";
+    if (!isMobileRef.current) {
+      ctx.shadowColor = "#fff";
     }
 
     // Reduce the number of points rendered on mobile
-    const pointsToRender = isMobile ? Math.floor(POINTS / 2) : POINTS;
+    const pointsToRender = isMobileRef.current ? Math.floor(POINTS / 2) : POINTS;
     
     for (let i = pointsToRender; i > 0; i--) {
       const value = i * SPACING + (timeRef.current % SPACING);
@@ -193,28 +203,28 @@ export const Spiral: React.FC = () => {
       y += (200 * value) / MAX_OFFSET;
       y += (x / cx) * widthRef.current * 0.1;
 
-      context.globalAlpha = 1 - value / MAX_OFFSET;
+      ctx.globalAlpha = 1 - value / MAX_OFFSET;
       
       // Only use shadow blur on desktop
-      if (!isMobile) {
-        context.shadowBlur = SHADOW_STRENGTH * o;
+      if (!isMobileRef.current) {
+        ctx.shadowBlur = SHADOW_STRENGTH * o;
       }
 
-      context.lineTo(cx + x, cy + y);
-      context.stroke();
+      ctx.lineTo(cx + x, cy + y);
+      ctx.stroke();
 
-      context.beginPath();
-      context.moveTo(cx + x, cy + y);
+      ctx.beginPath();
+      ctx.moveTo(cx + x, cy + y);
     }
 
     // Simplified ending for mobile
-    if (isMobile) {
-      context.lineTo(cx, cy - 100);
+    if (isMobileRef.current) {
+      ctx.lineTo(cx, cy - 100);
     } else {
-      context.lineTo(cx, cy - 200);
-      context.lineTo(cx, 0);
+      ctx.lineTo(cx, cy - 200);
+      ctx.lineTo(cx, 0);
     }
-    context.stroke();
+    ctx.stroke();
   };
 
   // Optimized mouse handlers with DOM batching
@@ -289,3 +299,4 @@ export const Spiral: React.FC = () => {
   }, [onTouchMove]);
   return <canvas ref={canvasRef} className="fixed inset-0 w-full h-ful pointer-events-none"></canvas>;
 };
+

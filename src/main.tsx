@@ -1,24 +1,52 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+
+// Import critical CSS first
 import "./index.css";
-import App from "./App";
+
+// Use dynamic import for App to reduce initial bundle size
+const App = React.lazy(() => import("./App"));
 
 // Register service worker in production with a delay to not block critical rendering
 if (typeof navigator !== "undefined" && 
     "serviceWorker" in navigator && 
     import.meta.env.PROD) {
-  // Defer service worker registration to after page load
-  setTimeout(() => {
+  // Use requestIdleCallback for service worker registration when browser is idle
+  const registerServiceWorker = () => {
     navigator.serviceWorker.register("/service-worker.js")
-      .catch(function() {
+      .catch(() => {
         console.log("Service worker registration failed");
       });
-  }, 1000); // 1 second delay to prioritize main content rendering
+  };
+  
+  // Use requestIdleCallback if available, otherwise setTimeout with a longer delay
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(registerServiceWorker, { timeout: 5000 });
+  } else {
+    setTimeout(registerServiceWorker, 3000); // Longer delay to ensure main content renders first
+  }
 }
 
-// Simple render without any extra code
-createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+// Loading fallback while App is being loaded
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-screen w-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+  </div>
 );
+
+// Optimize initial render
+const rootElement = document.getElementById("root");
+
+if (rootElement) {
+  // Create root outside of render to avoid extra work
+  const root = createRoot(rootElement);
+  
+  // Render with Suspense for lazy-loaded App
+  root.render(
+    <React.StrictMode>
+      <React.Suspense fallback={<LoadingFallback />}>
+        <App />
+      </React.Suspense>
+    </React.StrictMode>
+  );
+}

@@ -1,5 +1,5 @@
 import { Layout, DiscoverGames } from "../components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 
 const darklogo = "https://i.ibb.co/HLnWv6Lg/Logo.png";
@@ -22,19 +22,25 @@ const Home = () => {
   const springY2 = useSpring(y2, { stiffness: 50, damping: 40 });
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    // Use a more efficient approach with requestAnimationFrame
+    let timeoutId: number;
+    
+    const changeWord = () => {
       setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000); // Change word every 2 seconds
+      timeoutId = window.setTimeout(changeWord, 2000); // Change word every 2 seconds
+    };
+    
+    timeoutId = window.setTimeout(changeWord, 2000);
+    
+    return () => window.clearTimeout(timeoutId);
+  }, [words.length]);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const scrollToGames = () => {
+  const scrollToGames = useCallback(() => {
     const gamesSection = document.getElementById("games");
     if (gamesSection) {
       gamesSection.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, []);
 
   return (
     <Layout>
@@ -45,7 +51,7 @@ const Home = () => {
           style={{ y: springY2 }}
           layoutId="content-container"
         >
-          <div className="w-full flex items-center justify-between bg-transparent p-10 rounded-2xl border border-gray-800 shadow-xl">
+          <div className="w-full flex items-center justify-between bg-transparent p-10 rounded-2xl border border-gray-800 shadow-xl will-change-transform will-change-opacity">
             <h1 className="text-7xl text-white font-bold flex flex-col gap-6">
               <motion.span 
                 className="flex items-center"
@@ -65,9 +71,12 @@ const Home = () => {
                     duration: 3,
                     repeat: Infinity,
                     repeatType: "loop",
-                    ease: "easeInOut"
+                    ease: "easeInOut",
+                    // Use hardware acceleration
+                    type: "tween"
                   }}
                   loading="lazy"
+                  style={{ willChange: "transform" }}
                 /> Fuse is
                 a
               </motion.span>
@@ -86,11 +95,11 @@ const Home = () => {
                   exit={{ y: -50, opacity: 0 }}
                   transition={{ 
                     duration: 0.5,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 20
+                    type: "tween", // Use tween instead of spring for better performance
+                    ease: "easeOut"
                   }}
                   className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text"
+                  style={{ willChange: "transform, opacity" }}
                 >
                   {words[currentWordIndex]}
                 </motion.span>
@@ -101,8 +110,9 @@ const Home = () => {
                 className="flex items-center gap-4 hover:translate-x-2 transition-transform"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                transition={{ duration: 0.5, delay: 0.1, type: "tween" }}
                 whileHover={{ scale: 1.05 }}
+                style={{ willChange: "transform" }}
               >
                 <motion.img 
                   src={darklogo} 
@@ -117,8 +127,9 @@ const Home = () => {
                 className="flex items-center gap-4 hover:translate-x-2 transition-transform"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2, type: "tween" }}
                 whileHover={{ scale: 1.05 }}
+                style={{ willChange: "transform" }}
               >
                 <motion.img 
                   src={darklogo} 
@@ -133,8 +144,9 @@ const Home = () => {
                 className="flex items-center gap-4 hover:translate-x-2 transition-transform"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.3, type: "tween" }}
                 whileHover={{ scale: 1.05 }}
+                style={{ willChange: "transform" }}
               >
                 <motion.img 
                   src={darklogo} 
@@ -149,8 +161,9 @@ const Home = () => {
                 className="flex items-center gap-4 hover:translate-x-2 transition-transform"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ duration: 0.5, delay: 0.4, type: "tween" }}
                 whileHover={{ scale: 1.05 }}
+                style={{ willChange: "transform" }}
               >
                 <motion.img 
                   src={darklogo} 
@@ -167,7 +180,8 @@ const Home = () => {
             className="w-full flex items-center justify-center pt-24"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.6, type: "tween" }}
+            style={{ willChange: "transform, opacity" }}
           >
             <motion.button 
               onClick={scrollToGames} 
