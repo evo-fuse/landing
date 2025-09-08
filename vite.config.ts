@@ -30,9 +30,12 @@ export default defineConfig(({ mode }) => ({
     minifySyntax: mode === 'production',
     minifyWhitespace: mode === 'production',
     // Target modern browsers
-    target: 'es2020',
+    target: 'esnext',
     // Improve tree-shaking
-    treeShaking: true
+    treeShaking: true,
+    // Improve performance
+    legalComments: 'none',
+    pure: ['console.log', 'console.debug', 'console.info']
   },
   
   server: {
@@ -41,7 +44,7 @@ export default defineConfig(({ mode }) => ({
   
   build: {
     // Optimize build output
-    target: 'es2020', // Target modern browsers for better performance
+    target: 'esnext', // Target modern browsers for better performance
     minify: 'terser',
     cssMinify: true,
     assetsInlineLimit: 4096, // 4kb - inline small assets

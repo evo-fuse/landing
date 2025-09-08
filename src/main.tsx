@@ -4,8 +4,21 @@ import { createRoot } from "react-dom/client";
 // Import critical CSS first
 import "./index.css";
 
-// Use dynamic import for App to reduce initial bundle size
-const App = React.lazy(() => import("./App"));
+// Import preload utility
+import { preloadCriticalComponents } from "./utils/preloadComponents";
+
+// Use dynamic import with prefetch for App to reduce initial bundle size
+const App = React.lazy(() => {
+  // Add a hint to the browser to prefetch this resource
+  if (document.head && 'prefetch' in document.createElement('link')) {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.as = 'script';
+    link.href = './App.tsx';
+    document.head.appendChild(link);
+  }
+  return import("./App");
+});
 
 // Register service worker in production with a delay to not block critical rendering
 if (typeof navigator !== "undefined" && 
@@ -49,4 +62,7 @@ if (rootElement) {
       </React.Suspense>
     </React.StrictMode>
   );
+  
+  // Preload critical components when browser is idle
+  preloadCriticalComponents();
 }
