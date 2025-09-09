@@ -5,8 +5,6 @@ export const Spiral: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const isVisibleRef = useRef<boolean>(true);
-  const isMobileRef = useRef<boolean>(false);
-  
   // Use refs for values that need to persist between renders but don't trigger re-renders
   const timeRef = useRef(0);
   const velocityRef = useRef(0.1);
@@ -17,28 +15,13 @@ export const Spiral: React.FC = () => {
   const lastYRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Reduce complexity for mobile devices
-  const getMaxOffset = () => isMobileRef.current ? 200 : 400;
-  const getSpacing = () => isMobileRef.current ? 8 : 4;
-  const getPoints = () => getMaxOffset() / getSpacing();
-  const getPeak = () => getMaxOffset() * 0.25;
+  // Spiral configuration constants
+  const MAX_OFFSET = 400;
+  const SPACING = 4;
+  const POINTS = MAX_OFFSET / SPACING;
+  const PEAK = MAX_OFFSET * 0.25;
   const POINTS_PER_LAP = 6;
-  const getShadowStrength = () => isMobileRef.current ? 2 : 6;
-
-  // Check if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      isMobileRef.current = window.innerWidth < 768;
-    };
-    
-    checkMobile();
-    const debouncedCheckMobile = debounce(checkMobile, 250);
-    window.addEventListener('resize', debouncedCheckMobile);
-    
-    return () => {
-      window.removeEventListener('resize', debouncedCheckMobile);
-    };
-  }, []);
+  const SHADOW_STRENGTH = 6;
 
   // Resize canvas handler
   const resizeCanvas = useCallback(() => {
@@ -94,29 +77,17 @@ export const Spiral: React.FC = () => {
     const ctx = contextRef.current;
     const cx = widthRef.current / 2;
     const cy = heightRef.current / 2;
-    const MAX_OFFSET = getMaxOffset();
-    const SPACING = getSpacing();
-    const POINTS = getPoints();
-    const PEAK = getPeak();
-    const SHADOW_STRENGTH = getShadowStrength();
     
     // Setup drawing context
     ctx.globalCompositeOperation = "lighter";
     ctx.strokeStyle = "#fff";
-    ctx.lineWidth = isMobileRef.current ? 1 : 2;
-    
-    // Only use shadow effects on desktop
-    if (!isMobileRef.current) {
-      ctx.shadowColor = "#fff";
-    }
-    
-    // Reduce points on mobile
-    const pointsToRender = isMobileRef.current ? Math.floor(POINTS / 2) : POINTS;
+    ctx.lineWidth = 2;
+    ctx.shadowColor = "#fff";
     
     // Draw spiral
     ctx.beginPath();
     
-    for (let i = pointsToRender; i > 0; i--) {
+    for (let i = POINTS; i > 0; i--) {
       const value = i * SPACING + (timeRef.current % SPACING);
       
       const ax = Math.sin(value / POINTS_PER_LAP) * Math.PI;
@@ -132,11 +103,7 @@ export const Spiral: React.FC = () => {
                        (x / cx) * widthRef.current * 0.1;
       
       ctx.globalAlpha = 1 - value / MAX_OFFSET;
-      
-      // Only use shadow blur on desktop
-      if (!isMobileRef.current) {
-        ctx.shadowBlur = SHADOW_STRENGTH * o;
-      }
+      ctx.shadowBlur = SHADOW_STRENGTH * o;
       
       ctx.lineTo(cx + x, cy + adjustedY);
       ctx.stroke();
@@ -146,12 +113,8 @@ export const Spiral: React.FC = () => {
     }
     
     // Draw final line
-    if (isMobileRef.current) {
-      ctx.lineTo(cx, cy - 100);
-    } else {
-      ctx.lineTo(cx, cy - 200);
-      ctx.lineTo(cx, 0);
-    }
+    ctx.lineTo(cx, cy - 200);
+    ctx.lineTo(cx, 0);
     ctx.stroke();
   }, []);
 
