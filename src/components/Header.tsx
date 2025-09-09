@@ -16,7 +16,7 @@ const Header = memo(() => {
         <Link to="/" className="flex items-center space-x-2">
           <h2 className="text-xl sm:text-2xl font-display font-bold text-primary flex items-end m-0">
             Ev
-            <img src="https://i.ibb.co/HLnWv6Lg/Logo.png" alt="EvoFuse blockchain gaming platform logo" className="w-3 h-3 sm:w-4 sm:h-4 mb-[4px] sm:mb-[6px] ml-[2px] mr-2" />
+            <img src="https://i.ibb.co/HLnWv6Lg/Logo.png" alt="EvoFuse blockchain gaming platform logo" className="w-4 h-4 mb-[4px] sm:mb-[6px] ml-[2px] mr-2" />
             Fuse
           </h2>
         </Link>
