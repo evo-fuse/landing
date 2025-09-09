@@ -10,23 +10,23 @@ const Game2048 = () => {
             <div className="flex flex-col gap-6 max-w-lg backdrop-blur-sm bg-black/20 p-8 rounded-2xl border border-gray-700/50 shadow-xl">
               <div className="inline-block mb-2">
                 <span className="bg-main-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  FEATURED GAME
+                  P2E CRYPTO GAMES
                 </span>
               </div>
               <h1 className="text-5xl md:text-6xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">
                 EvoFuse 2048
               </h1>
               <p className="text-gray-200 text-2xl">
-                Experience our blockchain-powered 2048 game with unique features
+                Play game 2048 online - the ultimate P2E crypto games experience with blockchain rewards
               </p>
               <ul className="list-none space-y-3 text-gray-200 text-xl">
                 {[
-                  "Earn Cryptocurrency Rewards Based on Performance",
-                  "Share and Trade Customized Themes",
-                  "Utilize Power-Up Items",
-                  "Flexible Grid Size",
-                  "Seamless Wallet Management",
-                  "Uninterrupted Core Gameplay",
+                  "Play puzzle game 2048 with crypto rewards",
+                  "P2E crypto games with real earnings",
+                  "2048 game play with blockchain integration",
+                  "Play game 2048 online anytime",
+                  "Flexible grid sizes for all skill levels",
+                  "Seamless wallet management for rewards",
                 ].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <span className="min-w-6 min-h-6 max-w-6 max-h-6 mr-3 bg-main-500 rounded-full flex items-center justify-center text-white">
@@ -42,7 +42,7 @@ const Game2048 = () => {
                 rel="noopener noreferrer"
                 className="mt-6 max-w-min text-nowrap items-center px-8 py-4 bg-gradient-to-r from-main-500 to-main-700 text-white font-bold rounded-lg hover:from-main-600 hover:to-main-800 transition-all duration-300 shadow-lg shadow-main-500/30 flex gap-2"
               >
-                Play Now
+                Play Game 2048 Online
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -61,7 +61,7 @@ const Game2048 = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-main-500 to-purple-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
               <img
                 src="https://i.ibb.co/m5TWdRCd/2048preview.png"
-                alt="2048"
+                alt="Play puzzle game 2048 online - P2E crypto games preview"
                 className="relative rounded-2xl shadow-2xl border-[24px] border-[rgb(16,20,28)] transform transition-transform duration-500 group-hover:scale-[1.02]"
                 loading="lazy"
               />

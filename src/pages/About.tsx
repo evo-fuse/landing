@@ -57,20 +57,20 @@ const About = () => {
               </div>
               <h1 className="text-4xl md:text-5xl text-white font-bold bg-gradient-to-r from-main-400 to-purple-400 bg-clip-text text-transparent">EvoFuse</h1>
               <p className="text-gray-200 text-xl">
-                Classic games reimagined on the Fuse Network blockchain.
+                Play the best crypto games online and earn real rewards on the Fuse Network blockchain.
               </p>
               <p className="text-gray-200">
                 At EvoFuse, we're passionate about bringing traditional gaming experiences into the blockchain era. 
                 Our platform combines the nostalgia of classic games with the innovative capabilities of the Fuse Network, 
-                creating unique gaming experiences that are both familiar and revolutionary.
+                creating unique gaming experiences where you can earn games online with cryptocurrency rewards.
               </p>
               <ul className="list-none space-y-3 text-gray-200">
                 {[
+                  "Best crypto games online with real rewards",
+                  "Earn games online with cryptocurrency",
                   "Blockchain-powered gaming experiences",
-                  "Earn cryptocurrency while playing",
                   "Own and trade in-game assets",
-                  "Community-driven development",
-                  "Cross-platform compatibility"
+                  "Community-driven development"
                 ].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <span className="min-w-6 min-h-6 max-w-6 max-h-6 mr-3 bg-main-500 rounded-full flex items-center justify-center text-white">✓</span>

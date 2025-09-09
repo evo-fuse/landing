@@ -14,7 +14,7 @@ const games: Game[] = [
     image: "https://i.ibb.co/ymz62G4V/2048.png",
     title: "2048",
     description:
-      "Merge tiles to create the 2048 tile in this addictive mathematical puzzle game.",
+      "Merge tiles to create the 2048 tile in this addictive mathematical puzzle game. Earn crypto rewards while playing one of the best crypto games online.",
     status: true,
     url: "/2048"
   },
@@ -22,28 +22,28 @@ const games: Game[] = [
     image: "https://i.ibb.co/jvStTStZ/sudoku.png",
     title: "Sudoku",
     description:
-      "Fill the 9x9 grid with numbers so each column, row, and box contains digits 1-9.",
+      "Fill the 9x9 grid with numbers so each column, row, and box contains digits 1-9. Coming soon - earn games online with crypto rewards.",
     status: false,
   },
   {
     image: "https://i.ibb.co/r2jp7TYx/othello.png",
     title: "Othello",
     description:
-      "Strategic board game where players capture opponent's discs by flanking them.",
+      "Strategic board game where players capture opponent's discs by flanking them. One of the best crypto games coming soon with earning potential.",
     status: false,
   },
   {
     image: "https://i.ibb.co/rRKx1cMp/connectfour.png",
     title: "Connect Four",
     description:
-      "Drop colored discs to connect four in a row before your opponent does.",
+      "Drop colored discs to connect four in a row before your opponent does. Earn games online with this classic crypto game.",
     status: false,
   },
   {
     image: "https://i.ibb.co/MxDwTkT1/flappybird.png",
     title: "Flappy Bird",
     description:
-      "Navigate a bird through obstacles by tapping to fly in this addictive side-scrolling game.",
+      "Navigate a bird through obstacles by tapping to fly in this addictive side-scrolling game. Play the best crypto games online and earn rewards.",
     status: false,
   },
 ];
@@ -67,7 +67,7 @@ const DiscoverGames = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            Discover Our Games
+            Best Crypto Games Online
           </motion.h2>
           <motion.p
             className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto px-4"
@@ -76,7 +76,7 @@ const DiscoverGames = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Explore our collection of challenging games designed to test your skills and provide hours of entertainment
+            Play the best crypto games online and earn real rewards! Explore our collection of blockchain-powered games designed to test your skills and provide cryptocurrency rewards
           </motion.p>
         </div>
         

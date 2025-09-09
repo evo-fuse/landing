@@ -22,7 +22,7 @@ const darklogo = "https://i.ibb.co/HLnWv6Lg/Logo.png";
 
 const Home = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const words = ["P2E Games", "Innovative Fuse", "Casual Gamers"];
+  const words = ["Earn Games Online", "Best Crypto Games", "Blockchain Rewards"];
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -127,10 +127,10 @@ const Home = () => {
                     src={darklogo}
                     className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
                     loading="eager"
-                    alt="EvoFuse challenging games feature icon"
+                    alt="EvoFuse best crypto games feature icon"
                   />
                   <p className="text-sm sm:text-base lg:text-lg xl:text-xl">
-                    Challenging Games
+                    Best Crypto Games
                   </p>
                 </li>
                 <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
@@ -149,10 +149,10 @@ const Home = () => {
                     src={darklogo}
                     className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
                     loading="eager"
-                    alt="EvoFuse blockchain rewards icon"
+                    alt="EvoFuse earn games online rewards icon"
                   />
                   <p className="text-sm sm:text-base lg:text-lg xl:text-xl">
-                    Fuse Reward
+                    Earn Games Online
                   </p>
                 </li>
                 <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
