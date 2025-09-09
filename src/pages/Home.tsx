@@ -6,7 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 const DiscoverGames = lazy(() => import("../components/DiscoverGames"));
 
 // Use local image instead of external URL
-const darklogo = "/logo.png";
+const darklogo = "https://i.ibb.co/HLnWv6Lg/Logo.png";
 
 const Home = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
