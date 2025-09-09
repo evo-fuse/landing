@@ -48,98 +48,110 @@ const Home = () => {
 
   return (
     <Layout>
-      {/* Hero Section with Simple Black Background */}
-      <div ref={containerRef} className="h-[calc(100vh-56px)] w-full relative overflow-hidden flex justify-center bg-transparent">
+      {/* Hero Section with Responsive Design */}
+      <div ref={containerRef} className="w-full relative overflow-hidden flex justify-center bg-transparent px-4 sm:px-6 lg:px-8">
         <motion.div 
-          className="w-[80vw] h-full max-w-[1280px] flex flex-col justify-center z-10"
+          className="w-full max-w-7xl h-full flex flex-col justify-center z-10 py-8 sm:py-12 lg:py-16"
           style={{ y: springY2 }}
           layoutId="content-container"
         >
-          <div className="w-full flex items-center justify-between bg-transparent p-10 rounded-2xl border border-gray-800 shadow-xl will-change-transform will-change-opacity">
-            <h1 className="text-7xl text-white font-bold flex flex-col gap-6">
-              <motion.span 
-                className="flex items-center"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              >
-                Ev
-                <img 
-                  src={darklogo} 
-                  className="w-9 h-auto pt-5 ml-1 mr-2"
-                  loading="eager"
-                  alt="EvoFuse blockchain gaming platform logo"
-                /> Fuse is
-                a
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              >
-                Ecosystem for
-              </motion.span>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={currentWordIndex}
-                  initial={{ y: 50, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -50, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.5,
-                    type: "tween", // Use tween instead of spring for better performance
-                    ease: "easeOut"
-                  }}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text"
-                  style={{ willChange: "transform, opacity" }}
+          {/* Main Content Container - Responsive Layout */}
+          <div className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-between bg-transparent p-4 sm:p-6 lg:p-10 rounded-2xl border border-gray-800 shadow-xl will-change-transform will-change-opacity gap-8 lg:gap-12">
+            
+            {/* Hero Text Section */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold flex flex-col gap-2 sm:gap-4 lg:gap-6 leading-tight">
+                <motion.span 
+                  className="flex items-center flex-wrap"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                  {words[currentWordIndex]}
+                  Ev
+                  <img 
+                    src={darklogo} 
+                    className="w-6 h-auto sm:w-7 md:w-8 lg:w-9 pt-1 sm:pt-2 md:pt-3 lg:pt-5 ml-1 mr-2"
+                    loading="eager"
+                    alt="EvoFuse blockchain gaming platform logo"
+                  /> Fuse is
+                  <span className="block sm:inline">&nbsp;a</span>
                 </motion.span>
-              </AnimatePresence>
-            </h1>
-            <ul className="flex flex-col gap-6 text-white text-4xl bg-transparent p-6 rounded-xl border border-gray-800 shadow-lg">
-              <li className="flex items-center gap-4 hover:scale-105 transition-all duration-300">
-                <img 
-                  src={darklogo} 
-                  className="w-8 hover:rotate-12 transition-transform duration-300"
-                  loading="eager"
-                  alt="EvoFuse challenging games feature icon"
-                />
-                <p>Challenging Games</p>
-              </li>
-              <li className="flex items-center gap-4 hover:scale-105 transition-all duration-300">
-                <img 
-                  src={darklogo} 
-                  className="w-8 hover:rotate-12 transition-transform duration-300"
-                  loading="eager"
-                  alt="EvoFuse innovative features icon"
-                />
-                <p>Innovative Features</p>
-              </li>
-              <li className="flex items-center gap-4 hover:scale-105 transition-all duration-300">
-                <img 
-                  src={darklogo} 
-                  className="w-8 hover:rotate-12 transition-transform duration-300"
-                  loading="eager"
-                  alt="EvoFuse blockchain rewards icon"
-                />
-                <p>Fuse Reward</p>
-              </li>
-              <li className="flex items-center gap-4 hover:scale-105 transition-all duration-300">
-                <img 
-                  src={darklogo} 
-                  className="w-8 hover:rotate-12 transition-transform duration-300"
-                  loading="eager"
-                  alt="EvoFuse free gaming platform icon"
-                />
-                <p>Always Free</p>
-              </li>
-            </ul>
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                >
+                  Ecosystem for
+                </motion.span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentWordIndex}
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -50, opacity: 0 }}
+                    transition={{ 
+                      duration: 0.5,
+                      type: "tween",
+                      ease: "easeOut"
+                    }}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text block"
+                    style={{ willChange: "transform, opacity" }}
+                  >
+                    {words[currentWordIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </h1>
+            </div>
+
+            {/* Features List Section */}
+            <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+              <ul className="flex flex-col gap-3 sm:gap-4 lg:gap-6 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl bg-transparent p-4 sm:p-6 rounded-xl border border-gray-800 shadow-lg w-full max-w-md lg:max-w-none">
+                <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
+                  <img 
+                    src={darklogo} 
+                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
+                    loading="eager"
+                    alt="EvoFuse challenging games feature icon"
+                  />
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl">Challenging Games</p>
+                </li>
+                <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
+                  <img 
+                    src={darklogo} 
+                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
+                    loading="eager"
+                    alt="EvoFuse innovative features icon"
+                  />
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl">Innovative Features</p>
+                </li>
+                <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
+                  <img 
+                    src={darklogo} 
+                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
+                    loading="eager"
+                    alt="EvoFuse blockchain rewards icon"
+                  />
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl">Fuse Reward</p>
+                </li>
+                <li className="flex items-center gap-3 sm:gap-4 hover:scale-105 transition-all duration-300 p-2 rounded-lg hover:bg-gray-800/30">
+                  <img 
+                    src={darklogo} 
+                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 hover:rotate-12 transition-transform duration-300 flex-shrink-0"
+                    loading="eager"
+                    alt="EvoFuse free gaming platform icon"
+                  />
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl">Always Free</p>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="w-full flex items-center justify-center pt-24 opacity-0 animate-fadeIn" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
+
+          {/* CTA Button Section */}
+          <div className="w-full flex items-center justify-center pt-8 sm:pt-12 lg:pt-16 xl:pt-24 opacity-0 animate-fadeIn" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
             <button 
               onClick={scrollToGames} 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-12 py-4 rounded-full text-2xl font-bold transition-all duration-300 shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-xl active:scale-95"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-12 lg:py-4 rounded-full text-lg sm:text-xl lg:text-2xl font-bold transition-all duration-300 shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-xl active:scale-95 w-full max-w-xs sm:max-w-sm lg:max-w-none"
             >
               Explore EcoSystem
             </button>

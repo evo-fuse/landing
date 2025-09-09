@@ -259,16 +259,14 @@ export const Spiral: React.FC = () => {
   return (
     <canvas 
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full"
+      className="fixed inset-0"
       style={{
         zIndex: 0,
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
         pointerEvents: 'none',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       }}
     />
   );

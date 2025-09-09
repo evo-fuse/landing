@@ -10,10 +10,10 @@ interface LayoutProps {
 // Memoize the Layout component to prevent unnecessary re-renders
 const Layout = memo(({ children }: LayoutProps) => {
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative overflow-x-hidden">
       <Header />
       <Spiral />
-      <main className="flex-grow w-full mx-auto">
+      <main className="flex-grow w-full mx-auto relative z-10">
         {children}
       </main>
       <Footer />

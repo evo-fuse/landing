@@ -219,3 +219,89 @@ html, body, #root {
 .dark ::selection {
   color: #ffffff; /* dark:text-white */
 }
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Reduce motion for better mobile performance */
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-gradient,
+  .animate-bounce-subtle,
+  .animate-rotate,
+  .animate-scale-pulse {
+    animation-duration: 2s;
+  }
+  
+  /* Optimize transforms for mobile */
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Improve touch interactions */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+  }
+  
+  /* Optimize scrolling */
+  .overflow-auto, .overflow-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  }
+  
+  .heading-responsive {
+    font-size: clamp(1.5rem, 8vw, 3rem);
+    line-height: 1.2;
+  }
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

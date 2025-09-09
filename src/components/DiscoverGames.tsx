@@ -57,11 +57,11 @@ const DiscoverGames = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(128,90,213,0.1)_0%,_rgba(0,0,0,0)_50%)]"></div>
       
       {/* Main content grid */}
-      <div className="grid grid-cols-1 w-[80vw] max-w-[1280px] mx-auto py-16 z-10 gap-12">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 z-10">
         {/* Section header */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.h2 
-            className="text-5xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -70,7 +70,7 @@ const DiscoverGames = () => {
             Discover Our Games
           </motion.h2>
           <motion.p
-            className="text-gray-400 text-center max-w-2xl mx-auto"
+            className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto px-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -79,12 +79,13 @@ const DiscoverGames = () => {
             Explore our collection of challenging games designed to test your skills and provide hours of entertainment
           </motion.p>
         </div>
+        
         {/* Games grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 justify-center items-stretch">
           {games.map((game, index) => (
             <motion.div
               key={game.title}
-              className="bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-gray-700/50 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:translate-y-[-5px] flex flex-col h-full"
+              className="bg-gray-800/80 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-gray-700/50 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:translate-y-[-5px] flex flex-col h-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -99,7 +100,7 @@ const DiscoverGames = () => {
                 <motion.img
                   src={game.image}
                   alt={`EvoFuse ${game.title} blockchain game`}
-                  className="w-full h-56 object-cover"
+                  className="w-full h-40 sm:h-48 lg:h-56 object-cover"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                   loading="lazy"
@@ -110,7 +111,7 @@ const DiscoverGames = () => {
                   transition={{ duration: 0.3 }}
                 />
                 {/* Status badge */}
-                <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-medium ${
+                <div className={`absolute top-2 right-2 sm:top-4 sm:right-4 px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium ${
                   game.status 
                     ? "bg-green-500/80 text-white" 
                     : "bg-gray-600/80 text-gray-300"
@@ -119,9 +120,9 @@ const DiscoverGames = () => {
                 </div>
               </motion.div>
               
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-4 sm:p-6 flex flex-col flex-grow">
                 <motion.h3 
-                  className="text-2xl font-bold mb-2 text-white"
+                  className="text-lg sm:text-xl lg:text-2xl font-bold mb-2 text-white"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -130,7 +131,7 @@ const DiscoverGames = () => {
                   {game.title}
                 </motion.h3>
                 <motion.p 
-                  className="text-gray-300 mb-4 flex-grow"
+                  className="text-gray-300 mb-4 flex-grow text-sm sm:text-base"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
@@ -138,9 +139,9 @@ const DiscoverGames = () => {
                 >
                   {game.description}
                 </motion.p>
-                <div className="w-full flex justify-end mt-auto pt-4">
+                <div className="w-full flex justify-end mt-auto pt-2 sm:pt-4">
                   <motion.button
-                    className={`px-6 py-3 rounded-lg font-bold shadow-lg transition-all ${
+                    className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold shadow-lg transition-all text-sm sm:text-base ${
                       game.status
                         ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-purple-500/50"
                         : "bg-gray-700 text-gray-50 border border-gray-600"
@@ -169,11 +170,11 @@ const DiscoverGames = () => {
         </div>
         
         {/* Bottom decoration */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-6 sm:mt-8">
           <motion.div 
-            className="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
+            className="w-16 sm:w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
             initial={{ width: 0 }}
-            whileInView={{ width: 96 }}
+            whileInView={{ width: "100%" }}
             transition={{ duration: 1 }}
             viewport={{ once: true }}
           />
