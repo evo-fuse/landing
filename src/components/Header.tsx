@@ -36,6 +36,12 @@ const Header = memo(() => {
             2048
           </Link>
           <Link
+            to="/blog"
+            className="font-medium hover:text-primary transition-colors text-sm lg:text-base"
+          >
+            Blog
+          </Link>
+          <Link
             to="/about"
             className="font-medium hover:text-primary transition-colors text-sm lg:text-base"
           >
@@ -72,6 +78,13 @@ const Header = memo(() => {
               onClick={() => setIsMenuOpen(false)}
             >
               2048
+            </Link>
+            <Link
+              to="/blog"
+              className="py-3 font-medium hover:text-primary transition-colors text-white border-b border-gray-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
             </Link>
             <Link
               to="/about"

@@ -18,6 +18,7 @@ const Game2048 = lazy(() => import('./pages/Game2048'))
 const About = lazy(() => import('./pages/About'))
 const Sitemap = lazy(() => import('./pages/Sitemap'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const Blog = lazy(() => import('./pages/Blog'))
 
 // Loading fallback component - memoized to prevent unnecessary re-renders
 const LoadingFallback = memo(() => (
@@ -58,6 +59,13 @@ const AnimatedRoutes = memo(() => {
           <PageTransition>
             <Suspense fallback={<LoadingFallback />}>
               <Sitemap />
+            </Suspense>
+          </PageTransition>
+        } />
+        <Route path="/blog" element={
+          <PageTransition>
+            <Suspense fallback={<LoadingFallback />}>
+              <Blog />
             </Suspense>
           </PageTransition>
         } />
