@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaTwitter, FaDiscord } from 'react-icons/fa';
+import { FaTwitter, FaYoutube, FaTiktok, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -50,24 +50,42 @@ const Footer = () => {
           {/* Social Section */}
           <div>
             <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-white">Connect With Us</h3>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3">
               <a 
-                href="https://twitter.com/evofuse" 
+                href="https://x.com/evofuse2048" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-800"
-                aria-label="Twitter"
+                aria-label="X (Twitter)"
               >
                 <FaTwitter size={20} className="sm:w-6 sm:h-6" />
               </a>
               <a 
-                href="https://discord.gg/evofuse" 
+                href="https://youtube.com/@evofuse2048" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-800"
-                aria-label="Discord"
+                aria-label="YouTube"
               >
-                <FaDiscord size={20} className="sm:w-6 sm:h-6" />
+                <FaYoutube size={20} className="sm:w-6 sm:h-6" />
+              </a>
+              <a 
+                href="https://tiktok.com/@evofuse2048" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-800"
+                aria-label="TikTok"
+              >
+                <FaTiktok size={20} className="sm:w-6 sm:h-6" />
+              </a>
+              <a 
+                href="https://instagram.com/evofuse_" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-800"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={20} className="sm:w-6 sm:h-6" />
               </a>
             </div>
           </div>
